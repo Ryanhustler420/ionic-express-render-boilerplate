@@ -1,0 +1,18 @@
+name: Backup Database (Cron)
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "*/30 * * * *" # Runs the job every 30 minutes
+jobs:
+  download-database:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Downloading
+        run: echo "Downloading"
+      - name: Uploading via artifacts
+        run: echo "Data uploaded"
+  saving-to-mega:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download data via artifacts
+        run: echo "Downloding artifacts"

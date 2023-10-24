@@ -1,0 +1,71 @@
+name: CI
+env: { PORT: 8080, Group: CI }
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "feature-*"
+jobs:
+  # client-test:
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     CI: true # for non-watch test mode
+  #   steps:
+  #     - name: ⬇️ Get the code
+  #       uses: actions/checkout@v3
+  #     - name: ⚙️ Install dependencies
+  #       run: cd client && npm install
+  #     - name: 🧪 Test
+  #       run: npm run test --prefix ./client
+  client-build:
+    # needs: [client-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v3
+      - name: ⚙️ Install dependencies
+        run: cd client && npm install --force
+      - name: Build
+        run: npm run build --prefix ./client
+  server-test:
+    needs: [client-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v3
+      - name: ⚙️ Install dependencies
+        run: npm install
+      - name: Test
+        run: npm run test:ci
+  server-build:
+    needs: [server-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v3
+      - name: ⚙️ Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+  dockerize:
+    needs: [server-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v3
+      - name: ⚙️ Install client dependencies
+        run: cd client && npm install --force
+      - name: 👤 Build client
+        run: npm run build --prefix client
+      - name: ⚙️ Install server dependencies
+        run: npm install
+      - name: 💿 Build Server
+        run: npm run build
+      - name: 🐟 Building docker image
+        run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} .
+      - name: Run the docker image locally
+        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: Sleep for 1 minute
+        run: sleep 60
+      - name: Calling the api
+        run: curl http://localhost:${{ env.PORT }}/api
