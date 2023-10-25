@@ -7,7 +7,8 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToo
 
 // import { getPostById } from "../apis";
 import { Resizer } from "../components/Resizer";
-import { toggleDark } from "../utils/common/helper";
+import { toggleDark, isDark } from "../utils/common/helper";
+import { setPreference, PREFERENCE_KEYS } from '../utils/common/cache';
 
 import config from "../release/config";
 import Capacitor from '../utils/Capacitor';
@@ -58,7 +59,7 @@ const Home: React.FC<{
           <IonButton onClick={() => { Haptics.vibrate({ duration: 1000 }); }}>Vibrate</IonButton>
           <IonButton onClick={() => { Sound(WinFx); }}>Win</IonButton>
           <IonButton onClick={() => { Sound(LooseFx); }}>Lose</IonButton>
-          <IonButton onClick={() => { toggleDark(); }}>Change Theme</IonButton>
+          <IonButton onClick={() => { toggleDark(); setPreference(PREFERENCE_KEYS.DARK_MODE, `${isDark()}`); }}>Change Theme</IonButton>
           <IonButton onClick={() => { Capacitor.toast('Toast'); }}>Toast</IonButton>
           {/* <IonButton onClick={() => { getPostById(1, setPost, console.error); }}>Fetch Post</IonButton> */}
           <div>{JSON.stringify(post?.data)}</div>

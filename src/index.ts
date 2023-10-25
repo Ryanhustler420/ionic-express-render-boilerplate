@@ -3,20 +3,11 @@ import path from "path";
 import cors from "cors";
 import express from "express";
 import socketIO from "socket.io";
-import { rateLimit } from "express-rate-limit";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(
-  rateLimit({
-    windowMs: 5 * 60 * 1000, // 5 minutes
-    limit: 100, // Limit each IP to 100 requests per `window` (here, per 5 minutes)
-    standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-    // store: ... , // Use an external store for more precise rate limiting
-  })
-);
+app.set("trust proxy", true);
 
 const server = http.createServer(app);
 const io = new socketIO.Server(server, {
@@ -49,6 +40,10 @@ if (process.env.NODE_ENV != "development") {
 
 app.get("/api", (req, res) => {
   res.json({ message: "welcome to api" });
+});
+
+app.all("*", async (req, res) => {
+  res.redirect("/");
 });
 
 server.listen(PORT, () => {

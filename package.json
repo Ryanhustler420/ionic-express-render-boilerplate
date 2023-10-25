@@ -6,9 +6,10 @@
   "scripts": {
     "build": "tsc",
     "test:ci": "jest",
+    "build:ci": "npm run build --prefix client && tsc",
     "test": "jest --watchAll --no-cache --detectOpenHandles",
     "start": "cross-env NODE_ENV=production node dist/index.js",
-    "dev": "concurrently \"npm run watch\" \"npm start --prefix client\"",
+    "dev": "concurrently \"npm run watch\" \"npm run dev --prefix client\"",
     "watch": "cross-env NODE_ENV=development ts-node-dev --poll --respawn src/index.ts"
   },
   "jest": {
