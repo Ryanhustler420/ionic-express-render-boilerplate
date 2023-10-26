@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { useHistory } from 'react-router';
+import { socket } from '../utils/SocketIO';
 import { Haptics } from '@capacitor/haptics';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useContext, useEffect, useState } from 'react';
@@ -35,6 +36,25 @@ const Home: React.FC<{
   const [post, setPost] = useState<any>({});
 
   useEffect(() => { if (props.rendering) { props.onShowTabs(); } });
+  useEffect(() => {
+    socket.connect();
+
+    function onConnect() {
+      console.log('connected');
+    }
+
+    function onDisconnect() {}
+
+    socket.emit("message", "working");
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+    };
+  }, []);
 
   const breakPointTrigger = (width: number | undefined, name: string | undefined) => {
     screen.width = width as number;
@@ -56,6 +76,7 @@ const Home: React.FC<{
       <Resizer onChange={breakPointTrigger} />
       <IonContent fullscreen>
         <div className="flex flex-col space-y-5">
+          <IonButton routerLink="/dashboard" routerAnimation={e => e}>Settings</IonButton>
           <IonButton onClick={() => { Haptics.vibrate({ duration: 1000 }); }}>Vibrate</IonButton>
           <IonButton onClick={() => { Sound(WinFx); }}>Win</IonButton>
           <IonButton onClick={() => { Sound(LooseFx); }}>Lose</IonButton>

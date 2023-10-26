@@ -57,7 +57,7 @@ const App: React.FC = () => {
 
   const getRoutes = () => {
     return (
-      <IonRouterOutlet id="main-drawer">
+      <IonRouterOutlet id="main-drawer" animated={true}>
         <Route path={components.home.path} render={() => (<components.home.Component rendering={components.home.path === currentPath()} onHideTabs={hideTabsHandler} onShowTabs={showTabsHandler} />)} exact />
         <Route path={components.settings.path} render={() => (<components.settings.Component rendering={components.settings.path === currentPath()} onHideTabs={hideTabsHandler} onShowTabs={showTabsHandler} />)} exact />
         {/* <Route path={components.login.path} render={() => (<components.login.Component rendering={components.login.path === currentPath()} onHideTabs={hideTabsHandler} onShowTabs={showTabsHandler} />)} exact />
@@ -82,7 +82,7 @@ const App: React.FC = () => {
           <React.Suspense fallback={<IonSpinner />}>
             <IonTabs>
               {getRoutes()}
-              <IonTabBar slot="bottom" hidden={!visibleMainTabs}>
+              <IonTabBar slot="bottom" hidden={!visibleMainTabs} className={`${ !visibleMainTabs ? 'hidden' : ''}`}>
                 <IonTabButton tab="settings" href={components.settings.path}>
                   <IonIcon icon={settingsOutline} />
                   <IonLabel>Settings</IonLabel>
