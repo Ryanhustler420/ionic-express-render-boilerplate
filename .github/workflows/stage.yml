@@ -20,8 +20,10 @@ jobs:
   #   steps:
   #     - name: ⬇️ Get the code
   #       uses: actions/checkout@v3
-  #     - name: ⚙️ Install dependencies
-  #       run: cd client && npm install
+  #     - name: ⚙️ Load & Cache Dependencies
+  #       uses: ./.github/actions/cached-deps
+  #       with:
+  #         prefix: client
   #     - name: 🧪 Test
   #       run: npm run test --prefix client
   client-build:
@@ -31,8 +33,10 @@ jobs:
     steps:
       - name: ⬇️ Get the code
         uses: actions/checkout@v3
-      - name: ⚙️ Install dependencies
-        run: cd client && npm install --force
+      - name: ⚙️ Load & Cache Dependencies
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: client
       - name: Build
         run: npm run build --prefix client
   server-test:
@@ -41,8 +45,10 @@ jobs:
     steps:
       - name: ⬇️ Get the code
         uses: actions/checkout@v3
-      - name: ⚙️ Install dependencies
-        run: npm install
+      - name: ⚙️ Load & Cache Dependencies
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: .
       - name: Test
         run: npm run test:ci
   server-build:
@@ -51,8 +57,10 @@ jobs:
     steps:
       - name: ⬇️ Get the code
         uses: actions/checkout@v3
-      - name: ⚙️ Install dependencies
-        run: npm install
+      - name: ⚙️ Load & Cache Dependencies
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: .
       - name: Build
         run: npm run build
   dockerize:
@@ -61,12 +69,16 @@ jobs:
     steps:
       - name: ⬇️ Get the code
         uses: actions/checkout@v3
-      - name: ⚙️ Install client dependencies
-        run: cd client && npm install --force
+      - name: ⚙️ Load & Cache Dependencies for client
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: client
       - name: 👤 Build client
         run: npm run build --prefix client
-      - name: ⚙️ Install server dependencies
-        run: npm install
+      - name: ⚙️ Load & Cache Dependencies for server
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: .
       - name: 💿 Build Server
         run: npm run build
       - name: 🐟 Building docker image
@@ -83,12 +95,16 @@ jobs:
     steps:
       - name: ⬇️ Get the code
         uses: actions/checkout@v3
-      - name: ⚙️ Install client dependencies
-        run: cd client && npm install --force
+      - name: ⚙️ Load & Cache Dependencies for client
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: client
       - name: 👤 Build client
         run: npm run build --prefix client
-      - name: ⚙️ Install server dependencies
-        run: npm install
+      - name: ⚙️ Load & Cache Dependencies for server
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: .
       - name: 💿 Build Server
         run: npm run build
       - name: 🐟 Building docker image
@@ -99,6 +115,7 @@ jobs:
         run: sleep 60
       - name: Calling the api
         run: curl http://localhost:${{ env.PORT }}/api
+      # Docker push begins
       - name: Docker login
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:

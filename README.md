@@ -20,6 +20,12 @@ Create these branches: `master`, `stage`, `prod`
 | -------- | ------ |
 | repo     | email  |
 
+[Cronjobs](https://cron-job.org/)
+
+| username         | method |
+| ---------------- | ------ |
+| example@test.com | email  |
+
 ### Repository Env
 
 - RENDER_SERVER_HOST_URL: `https://abc-xyz.onrender.com`
