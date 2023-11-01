@@ -21,18 +21,10 @@ const handle = (response: HttpResponse, cb: (response: HttpResponse) => void) =>
     }
 }
 
-export const getPosts = _.debounce((cb: (response: HttpResponse) => void, err: (e: any) => void) => {
+export const getWelcome = _.debounce((cb: (response: HttpResponse) => void, err: (e: any) => void) => {
     CapacitorHttp.get({
-        url: routes.GET_POSTS,
+        url: routes.GET_WELCOME,
         headers: commonHeader(),
-    }).then(e => handle(e, cb)).catch(err);
-});
-
-export const postCreateUser = _.debounce((data: { id: string, uid: string, text: string }, cb: (response: HttpResponse) => void, err: (e: any) => void) => {
-    CapacitorHttp.post({
-        url: routes.POST_POSTS,
-        headers: commonHeader(),
-        data: JSON.stringify(data),
     }).then(e => handle(e, cb)).catch(err);
 });
 
