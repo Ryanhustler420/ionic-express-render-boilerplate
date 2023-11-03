@@ -44,6 +44,18 @@ Create these branches: `master`, `stage`, `prod`
   - stage
   - prod
 
+### Firebase Setup
+
+- Create a project
+- Generate a new private key
+- Copy the code from downloaded file and place inside firebase.json file
+
+### Mongodb Atlas Setup
+
+- Create cluster
+- Create index on collection
+- Do whatever else you want to do
+
 ### Todo
 
 - Improve the app workflows

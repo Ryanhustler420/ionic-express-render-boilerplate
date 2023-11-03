@@ -1,13 +1,10 @@
 import http from "http";
-import path from "path";
-import cors from "cors";
-import express from "express";
+import { app } from "./app";
+import mongoose from "mongoose";
 import socketIO from "socket.io";
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.set("trust proxy", true);
+import admin from "firebase-admin";
+import { DATABASE, MONGO_URI, PORT } from "./env";
+import serviceAccount from "./secrets/firebase-config";
 
 const server = http.createServer(app);
 const io = new socketIO.Server(server, {
@@ -15,9 +12,7 @@ const io = new socketIO.Server(server, {
   path: "/deep/socket",
 });
 
-const PORT = process.env.PORT || 8080;
 const appNS = io.of("/appname");
-
 appNS.on("connection", (socket) => {
   appNS.emit("joined", `joined ${socket.id}`);
 
@@ -31,21 +26,26 @@ appNS.on("connection", (socket) => {
   });
 });
 
-if (process.env.NODE_ENV != "development") {
-  app.use(express.static(path.join(__dirname, "..", "client", "build")));
-  app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
+const start = async () => {
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        clientEmail: serviceAccount.client_email,
+        privateKey: serviceAccount.private_key,
+        projectId: serviceAccount.project_id,
+      }),
+    });
+    // kafkaWrapper.init(KAFKA_ID, [KAFKA_1]);
+    await mongoose.connect(`${MONGO_URI}/${DATABASE}`);
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.log(err);
+  }
+
+  const HOST = "0.0.0.0";
+  server.listen(PORT, HOST, () => {
+    console.log(`Server is on http://${HOST}:${PORT}`);
   });
-}
+};
 
-app.get("/api", (req, res) => {
-  res.json({ message: "welcome to api" });
-});
-
-app.all("*", async (req, res) => {
-  res.redirect("/");
-});
-
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+start();
