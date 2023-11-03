@@ -4,6 +4,7 @@ import { JWT_KEY } from "../env";
 import admin from "firebase-admin";
 import { User } from "../models/key/user";
 import express, { Request, Response } from "express";
+import cookieConfig from "../services/cookie-config";
 import { Joi, Segments, celebrate } from "@xcc.com/xcc-celebrate";
 import {
   custom_jwt,
@@ -37,7 +38,12 @@ router.post(
     if (existingUser)
       throw new BadRequestError("This email address is already in use");
 
-    const firebase = await admin.auth().createUser({ email, password }).catch(e => { throw new BadRequestError(e.message); });
+    const firebase = await admin
+      .auth()
+      .createUser({ email, password })
+      .catch((e) => {
+        throw new BadRequestError(e.message);
+      });
     if (firebase) {
       const user = User.build({
         name,
@@ -55,7 +61,7 @@ router.post(
       req.session = { jwt: userJwt };
       res.setHeader("base64", custom_jwt.encode(userJwt));
       res
-        .cookie("Set-Cookie", custom_jwt.encode(userJwt))
+        .cookie("Set-Cookie", custom_jwt.encode(userJwt), cookieConfig)
         .status(201)
         .send(user);
     } else {

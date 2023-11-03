@@ -4,6 +4,7 @@ import admin from "firebase-admin";
 import { User } from "../models/key/user";
 import { Password } from "../services/password";
 import express, { Request, Response } from "express";
+import cookieConfig from "../services/cookie-config";
 import { celebrate, Joi, Segments } from "@xcc.com/xcc-celebrate";
 import {
   custom_jwt,
@@ -40,7 +41,12 @@ router.post(
     if (!passwordsMatch) throw new BadRequestError("Invalid credentials");
     if (existingUser.is_banned) throw new BadRequestError("You are banned");
 
-    const firebase = await admin.auth().getUserByEmail(email).catch(e => { throw new BadRequestError(e.message); });
+    const firebase = await admin
+      .auth()
+      .getUserByEmail(email)
+      .catch((e) => {
+        throw new BadRequestError(e.message);
+      });
     if (firebase) {
       // Generate JWT
       const userJwt = jwt.sign(
@@ -52,7 +58,7 @@ router.post(
       req.session = { jwt: userJwt };
       res.setHeader("base64", custom_jwt.encode(userJwt));
       res
-        .cookie("Set-Cookie", custom_jwt.encode(userJwt))
+        .cookie("Set-Cookie", custom_jwt.encode(userJwt), cookieConfig)
         .status(200)
         .send(existingUser);
     } else {

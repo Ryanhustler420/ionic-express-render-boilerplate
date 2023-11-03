@@ -4,7 +4,7 @@ import express from "express";
 import { json } from "body-parser";
 
 import cookieSession from "cookie-session";
-import { NODE_ENV } from "./env";
+import cookieConfig from "./services/cookie-config";
 import cors from "cors";
 
 import { errorHandler } from "@xcc.com/xcc-common";
@@ -21,7 +21,7 @@ const app = express();
 app.use(json());
 app.set("trust proxy", true);
 app.use(cors({ origin: "*", exposedHeaders: ["base64"] }));
-app.use(cookieSession({ signed: false, secure: NODE_ENV !== "test" }));
+app.use(cookieSession(cookieConfig));
 
 app.use(express.static(path.join(__dirname, "..", "client", "build")));
 app.use(showUserCurrentRouter);
