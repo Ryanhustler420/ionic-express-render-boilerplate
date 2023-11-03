@@ -37,7 +37,7 @@ router.post(
     if (existingUser)
       throw new BadRequestError("This email address is already in use");
 
-    const firebase = await admin.auth().createUser({ email, password });
+    const firebase = await admin.auth().createUser({ email, password }).catch(e => { throw new BadRequestError(e.message); });
     if (firebase) {
       const user = User.build({
         name,

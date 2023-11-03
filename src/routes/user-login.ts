@@ -40,7 +40,7 @@ router.post(
     if (!passwordsMatch) throw new BadRequestError("Invalid credentials");
     if (existingUser.is_banned) throw new BadRequestError("You are banned");
 
-    const firebase = await admin.auth().getUserByEmail(email);
+    const firebase = await admin.auth().getUserByEmail(email).catch(e => { throw new BadRequestError(e.message); });
     if (firebase) {
       // Generate JWT
       const userJwt = jwt.sign(
