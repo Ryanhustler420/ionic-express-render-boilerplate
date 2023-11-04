@@ -76,7 +76,7 @@ const Home: React.FC<{
       <Resizer onChange={breakPointTrigger} />
       <IonContent fullscreen>
         <div className="flex flex-col space-y-5">
-          <IonButton routerLink="/dashboard" routerAnimation={e => e}>Settings</IonButton>
+          <IonButton routerLink="/settings">Settings</IonButton>
           <IonButton onClick={() => { Haptics.vibrate({ duration: 1000 }); }}>Vibrate</IonButton>
           <IonButton onClick={() => { Sound(WinFx); }}>Win</IonButton>
           <IonButton onClick={() => { Sound(LooseFx); }}>Lose</IonButton>

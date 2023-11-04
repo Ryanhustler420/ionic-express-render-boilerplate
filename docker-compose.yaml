@@ -2,7 +2,7 @@ version: '3.8'
 services:
   dev:
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       context: .
     restart: always
     ports:
@@ -15,9 +15,12 @@ services:
       - JWT_KEY=something
       - ENV=development
       - PORT=8080
-    volumes:
-      - /app/node_modules
-      - .:/app
+    # volumes:
+    #   - ./client/build/:
+    #   - ./dist/:
+    #   - /app/client/node_modules
+    #   - /app/node_modules
+    #   - .:/app
     depends_on:
       - kafka
       - mongodb
