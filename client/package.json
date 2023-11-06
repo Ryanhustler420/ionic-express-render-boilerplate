@@ -2,7 +2,7 @@
   "name": "appname",
   "version": "0.0.1",
   "description": "An Ionic project",
-  "proxy": "http://localhost:8080",
+  "proxy": "http://127.0.0.1:8080",
   "private": true,
   "dependencies": {
     "@awesome-cordova-plugins/toast": "^6.4.0",
@@ -36,7 +36,6 @@
     "blueimp-md5": "^2.19.0",
     "cordova-plugin-x-toast": "^2.7.3",
     "history": "^4.9.0",
-    "http-proxy-middleware": "^2.0.6",
     "ionicons": "^7.0.0",
     "joi": "^17.7.1",
     "jquery": "^3.6.3",

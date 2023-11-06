@@ -31,6 +31,6 @@ export const getWelcome = _.debounce((cb: (response: HttpResponse) => void, err:
 const commonHeader = () => {
     return {
         'Content-Type': 'application/json',
-        'appname-auth-token': authState.getToken() || '',
+        'base64': authState.getToken() || '',
     };
 }

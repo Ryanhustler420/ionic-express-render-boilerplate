@@ -22,17 +22,6 @@ export default class AuthState {
         return false;
     };
 
-    isRootUser() {
-        let user = this.getUser() as IPreviewUser;
-        if (user) {
-            const found = _.indexOf(user.roles, 2, 0);
-            if (found !== -1) {
-                return true;
-            }
-        }
-        return false;
-    };
-
     getUser() {
         if (this.get('auth_table') == null) return null;
         try {
