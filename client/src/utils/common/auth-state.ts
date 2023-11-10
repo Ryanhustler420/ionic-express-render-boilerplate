@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import jwt_decode from 'jwt-decode';
 import { IPreviewUser } from '../../apis/definations';
 
 export default class AuthState {
@@ -18,7 +17,7 @@ export default class AuthState {
     validateUser() {
         let token = this.getToken();
         let user = this.getUser() as IPreviewUser;
-        if (user && token) return (jwt_decode(token.toString()) as any)['_id'] === user?._id;
+        if (user && token) return true;
         return false;
     };
 

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import AuthState from "./utils/common/auth-state";
 import React, { useState, useEffect } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, useHistory } from 'react-router-dom';
 import { IonReactRouter } from '@ionic/react-router';
 import HistoryMethodsIPC, { IHistoryMethodsIPC } from "./components/HistoryMethodsIPC";
 
@@ -48,6 +48,7 @@ export const components = {
   },
 };
 const App: React.FC = () => {
+  const history = useHistory();
   const authState = new AuthState();
   const historyMethodsIPCRef = React.createRef<IHistoryMethodsIPC>();
 
@@ -69,8 +70,9 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    // let isAuthenticated = authState.validateUser();
-    // if (!isAuthenticated) historyMethodsIPCRef.current?.clearAndGoto(components.login.path);
+    let isAuthenticated = authState.validateUser();
+    if (!isAuthenticated) historyMethodsIPCRef.current?.clearAndGoto(components.settings.path);
+    else if (window.location.pathname == components.settings.path) historyMethodsIPCRef.current?.clearAndGoto(components.home.path);
   });
 
   return (
