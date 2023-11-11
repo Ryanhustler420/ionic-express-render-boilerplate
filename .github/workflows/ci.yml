@@ -74,14 +74,7 @@ jobs:
       - name: 💿 Build Server
         run: npm run build
       - name: 🐟 Building docker image
-        run: |
-          docker build \
-            --build-arg DB_USERNAME=${{ secrets.MONGODB_USERNAME }} \
-            --build-arg DB_PASSWORD=${{ secrets.MONGODB_PASSWORD }} \
-            --build-arg FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }} \
-            --build-arg FIREBASE_PRIVATE_KEY=${{ secrets.FIREBASE_PRIVATE_KEY }} \
-            --build-arg FIREBASE_CLIENT_EMAIL=${{ secrets.FIREBASE_CLIENT_EMAIL }} \
-            -t ${{ secrets.DOCKER_IMAGE_NAME }} .
+        run: docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg DB_USERNAME="${{ secrets.MONGODB_USERNAME }}" --build-arg DB_PASSWORD="${{ secrets.MONGODB_PASSWORD }}" --build-arg FIREBASE_PROJECT_ID="${{ secrets.FIREBASE_PROJECT_ID }}" --build-arg FIREBASE_PRIVATE_KEY="${{ secrets.FIREBASE_PRIVATE_KEY }}" --build-arg FIREBASE_CLIENT_EMAIL="${{ secrets.FIREBASE_CLIENT_EMAIL }}"
       - name: Run the docker image locally
         run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
       - name: Sleep for 1 minute

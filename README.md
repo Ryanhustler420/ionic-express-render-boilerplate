@@ -56,7 +56,7 @@ Create these branches: `master`, `stage`, `prod`
 
 ### Docker Build Args
 
-> docker build --build-arg MONGODB_USERNAME=username --build-arg MONGODB_PASSWORD=secret ... -t appname .
+> docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg DB_USERNAME="${{ secrets.MONGODB_USERNAME }}" --build-arg DB_PASSWORD="${{ secrets.MONGODB_PASSWORD }}"
 
 - MONGODB_USERNAME: `username`
 - MONGODB_PASSWORD: `password`

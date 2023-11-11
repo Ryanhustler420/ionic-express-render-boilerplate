@@ -1,12 +1,12 @@
 FROM node:18-alpine
 
-# docker build --build-arg DB_USERNAME=secre** --build-arg DB_PASSWORD=secret** -t application .
+# docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg DB_USERNAME="${{ secrets.MONGODB_USERNAME }}" --build-arg DB_PASSWORD="${{ secrets.MONGODB_PASSWORD }}"
 # docker run -d -p 3000:3000 -e ELSE=something application
 ARG DB_USERNAME=username
 ARG DB_PASSWORD=password
 ARG FIREBASE_CLIENT_EMAIL=firebase-adminsdk-dsdsdsd@librarysoftware-asdasd.iam.gserviceaccount.com
 ARG FIREBASE_PRIVATE_KEY=-----BEGIN_PRIVATE_KEY-----\acdsddsd=\n-----END_PRIVATE_KEY-----\n
-ARG FIREBASE_PROJECT_ID=socket-polling
+ARG FIREBASE_PROJECT_ID=appname
 
 # Please dont change this here, You can change this via outside
 ENV ENV=production 
