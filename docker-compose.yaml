@@ -9,6 +9,9 @@ services:
       - "8080:8080"
     environment:
       - MONGO_URI=mongodb://mongodb:27017
+      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
       - KAFKA_ID=appname
       - DATABASE=appname
       - KAFKA_1=kafka:9092

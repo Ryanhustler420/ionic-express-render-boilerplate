@@ -26,10 +26,14 @@ Create these branches: `master`, `stage`, `prod`
 | ---------------- | ------ |
 | example@test.com | email  |
 
+[Firebase](https://console.firebase.google.com/)
+
+| email            | project |
+| ---------------- | ------- |
+| example@test.com | appname |
+
 ### Repository Env
 
-- MONGODB_USERNAME: `repository`
-- MONGODB_PASSWORD: `secret`
 - RENDER_SERVER_HOST_URL: `https://abc-xyz.onrender.com`
 - RENDER_APP_SERVICE_ID: `srv-cgnlgo61101c73al966g`
 - RENDER_PROFILE_AUTH_API_TOKEN: `rnd_xkQiKV...`
@@ -37,6 +41,28 @@ Create these branches: `master`, `stage`, `prod`
 - DOCKER_PASSWORD: `admin123`
 - DOCKER_USERNAME: `user69`
 - SLACK_WEBHOOK_URL: `https://something`
+
+### Application Env
+
+- FIREBASE_CLIENT_EMAIL: `firebase-adminsdk-dsdsdsd@librarysoftware-asdasd.iam.gserviceaccount.com`
+- FIREBASE_PRIVATE_KEY: `-----BEGIN_PRIVATE_KEY-----\acdsddsd=\n-----END_PRIVATE_KEY-----\n`
+- FIREBASE_PROJECT_ID: `appname`
+- MONGO_URI: `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@cluster0.xyz.mongodb.net`
+- KAFKA_ID: `appname`
+- DATABASE: `appname`
+- KAFKA_1: `kafka:9092`
+- JWT_KEY: `something`
+- PORT: `8080`
+
+### Docker Build Args
+
+> docker build --build-arg MONGODB_USERNAME=username --build-arg MONGODB_PASSWORD=secret ... -t appname .
+
+- MONGODB_USERNAME: `username`
+- MONGODB_PASSWORD: `password`
+- FIREBASE_PROJECT_ID=`appname`
+- FIREBASE_PRIVATE_KEY=`-----BEGIN_PRIVATE_KEY-----\acdsddsd=\n-----END_PRIVATE_KEY-----\n`
+- FIREBASE_CLIENT_EMAIL=`firebase-adminsdk-dsdsdsd@librarysoftware-asdasd.iam.gserviceaccount.com`
 
 ### Important
 

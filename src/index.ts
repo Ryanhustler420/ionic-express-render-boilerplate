@@ -3,8 +3,14 @@ import { app } from "./app";
 import mongoose from "mongoose";
 import socketIO from "socket.io";
 import admin from "firebase-admin";
-import { DATABASE, MONGO_URI, PORT } from "./env";
-import serviceAccount from "./secrets/firebase-config";
+import {
+  PORT,
+  DATABASE,
+  MONGO_URI,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_PRIVATE_KEY,
+  FIREBASE_CLIENT_EMAIL,
+} from "./env";
 
 const server = http.createServer(app);
 const io = new socketIO.Server(server, {
@@ -30,9 +36,9 @@ const start = async () => {
   try {
     admin.initializeApp({
       credential: admin.credential.cert({
-        clientEmail: serviceAccount.client_email,
-        privateKey: serviceAccount.private_key,
-        projectId: serviceAccount.project_id,
+        clientEmail: FIREBASE_CLIENT_EMAIL,
+        privateKey: FIREBASE_PRIVATE_KEY,
+        projectId: FIREBASE_PROJECT_ID,
       }),
     });
     // kafkaWrapper.init(KAFKA_ID, [KAFKA_1]);
