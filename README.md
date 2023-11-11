@@ -28,6 +28,8 @@ Create these branches: `master`, `stage`, `prod`
 
 ### Repository Env
 
+- MONGODB_USERNAME: `repository`
+- MONGODB_PASSWORD: `secret`
 - RENDER_SERVER_HOST_URL: `https://abc-xyz.onrender.com`
 - RENDER_APP_SERVICE_ID: `srv-cgnlgo61101c73al966g`
 - RENDER_PROFILE_AUTH_API_TOKEN: `rnd_xkQiKV...`

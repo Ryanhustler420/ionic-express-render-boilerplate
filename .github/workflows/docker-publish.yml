@@ -71,7 +71,7 @@ jobs:
       - name: 💿 Build Server
         run: npm run build
       - name: 🐟 Building docker image
-        run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} .
+        run: docker build --build-arg DB_USERNAME=${{ secrets.MONGODB_USERNAME }} --build-arg DB_PASSWORD=${{ secrets.MONGODB_PASSWORD }} -t ${{ secrets.DOCKER_IMAGE_NAME }} .
       - name: Run the docker image locally
         run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
       - name: Sleep for 1 minute
@@ -97,7 +97,7 @@ jobs:
       - name: 💿 Build Server
         run: npm run build
       - name: 🐟 Building docker image
-        run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} .
+        run: docker build --build-arg DB_USERNAME=${{ secrets.MONGODB_USERNAME }} --build-arg DB_PASSWORD=${{ secrets.MONGODB_PASSWORD }} -t ${{ secrets.DOCKER_IMAGE_NAME }} .
       - name: Run the docker image locally
         run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
       - name: Sleep for 1 minute

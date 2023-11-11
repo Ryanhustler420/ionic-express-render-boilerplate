@@ -1,4 +1,4 @@
-export default {
+const o = {
   type: "service_account",
   project_id: "librarysoftware-asdasas",
   private_key_id: "dsadasdsad",
@@ -14,3 +14,5 @@ export default {
     "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-sdsdsd%40librarysoftware-asdasd.iam.gserviceaccount.com",
   universe_domain: "googleapis.com",
 };
+
+export default o;
