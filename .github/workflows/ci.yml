@@ -29,7 +29,7 @@ jobs:
         uses: ./.github/actions/cached-deps
         with:
           prefix: client
-      - name: Build
+      - name: ⚒️ Build
         run: npm run build --prefix client
   server-test:
     needs: [client-build]
@@ -41,7 +41,7 @@ jobs:
         uses: ./.github/actions/cached-deps
         with:
           prefix: .
-      - name: Test
+      - name: 🧪 Test
         run: npm run test:ci
   server-build:
     needs: [server-test]
@@ -53,7 +53,7 @@ jobs:
         uses: ./.github/actions/cached-deps
         with:
           prefix: .
-      - name: Build
+      - name: ⚒️ Build
         run: npm run build
   dockerize:
     needs: [server-build]
@@ -65,19 +65,19 @@ jobs:
         uses: ./.github/actions/cached-deps
         with:
           prefix: client
-      - name: 👤 Build client
+      - name: ⚒️ Build client
         run: npm run build --prefix client
       - name: ⚙️ Load & Cache Dependencies for server
         uses: ./.github/actions/cached-deps
         with:
           prefix: .
-      - name: 💿 Build Server
+      - name: ⚒️ Build Server
         run: npm run build
       - name: 🐟 Building docker image
         run: docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg DB_USERNAME="${{ secrets.MONGODB_USERNAME }}" --build-arg DB_PASSWORD="${{ secrets.MONGODB_PASSWORD }}" --build-arg FIREBASE_PROJECT_ID="${{ secrets.FIREBASE_PROJECT_ID }}" --build-arg FIREBASE_PRIVATE_KEY="${{ secrets.FIREBASE_PRIVATE_KEY }}" --build-arg FIREBASE_CLIENT_EMAIL="${{ secrets.FIREBASE_CLIENT_EMAIL }}"
-      - name: Run the docker image locally
+      - name: 🏡 Run the docker image locally
         run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
-      - name: Sleep for 1 minute
-        run: sleep 60
-      - name: Calling the api
+      - name: 💤 Sleep for 30 seconds
+        run: sleep 30
+      - name: 📞 Calling the api
         run: curl http://localhost:${{ env.PORT }}/api

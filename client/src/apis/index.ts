@@ -21,9 +21,9 @@ const handle = (response: HttpResponse, cb: (response: HttpResponse) => void) =>
     }
 }
 
-export const getWelcome = _.debounce((cb: (response: HttpResponse) => void, err: (e: any) => void) => {
+export const getCurrentUser = _.debounce((cb: (response: HttpResponse) => void, err: (e: any) => void) => {
     CapacitorHttp.get({
-        url: routes.GET_WELCOME,
+        url: routes.GET_CURRENT_USER,
         headers: commonHeader(),
     }).then(e => handle(e, cb)).catch(err);
 });

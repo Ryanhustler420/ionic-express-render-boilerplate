@@ -5,11 +5,11 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy Trigger
+      - name: ⚠️ Deploy Trigger
         id: render-deployer
         uses: OneHox/render-deploy-api@v1.0.0
         with:
           serviceId: ${{ secrets.RENDER_APP_SERVICE_ID }}
           bearer: ${{ secrets.RENDER_PROFILE_AUTH_API_TOKEN }}
-      - name: Message
+      - name: 💬 Message
         run: echo "${{ steps.render-deployer.outputs.response }}"

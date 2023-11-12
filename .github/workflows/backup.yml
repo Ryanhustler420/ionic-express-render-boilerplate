@@ -7,12 +7,12 @@ jobs:
   download-database:
     runs-on: ubuntu-latest
     steps:
-      - name: Downloading
+      - name: ⬇️ Downloading
         run: echo "Downloading"
-      - name: Uploading via artifacts
+      - name: ⬆️ Uploading via artifacts
         run: echo "Data uploaded"
   saving-to-mega:
     runs-on: ubuntu-latest
     steps:
-      - name: Download data via artifacts
+      - name: 🌍 Download data via artifacts
         run: echo "Downloding artifacts"

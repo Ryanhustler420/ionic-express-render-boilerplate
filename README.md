@@ -41,6 +41,8 @@ Create these branches: `master`, `stage`, `prod`
 - DOCKER_PASSWORD: `admin123`
 - DOCKER_USERNAME: `user69`
 - SLACK_WEBHOOK_URL: `https://something`
+- NETLIFY_AUTH_TOKEN?: `something`
+- NETLIFY_SITE_ID?: `something`
 
 ### Application Env
 
