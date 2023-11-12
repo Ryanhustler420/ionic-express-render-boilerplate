@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 export const ENV = () => process.env.ENV || "development";
 export const JWT_KEY = process.env.JWT_KEY || "secret";
 export const KAFKA_1 = process.env.KAFKA_1 || "kafka:9092";
