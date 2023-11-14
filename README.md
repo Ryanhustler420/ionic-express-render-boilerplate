@@ -86,6 +86,10 @@ Create these branches: `master`, `stage`, `prod`
 - Create index on collection
 - Do whatever else you want to do
 
+### Render Issue
+
+- [Add Custom Domain](https://community.render.com/t/what-could-cause-the-certificate-pending-for-the-new-custom-domain/1091/2)
+
 ### Todo
 
 - Improve the app workflows
