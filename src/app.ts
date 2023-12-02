@@ -32,7 +32,9 @@ app.use(userLogoutRouter);
 app.use(userLoginRouter);
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
+  if (process.env.ENV === "production") {
+    res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
+  } else res.json({ message: "hello" });
 });
 
 app.all("*", async (req, res) => {

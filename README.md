@@ -32,8 +32,10 @@ Create these branches: `master`, `stage`, `prod`
 | ---------------- | ------- |
 | example@test.com | appname |
 
-### Repository Env
+### Workflow Env
 
+- MONGO_URI: `something`
+- FIREBASE_SA: `{}`
 - RENDER_SERVER_HOST_URL: `https://abc-xyz.onrender.com`
 - RENDER_APP_SERVICE_ID: `srv-cgnlgo61101c73al966g`
 - RENDER_PROFILE_AUTH_API_TOKEN: `rnd_xkQiKV...`
@@ -44,27 +46,23 @@ Create these branches: `master`, `stage`, `prod`
 - NETLIFY_AUTH_TOKEN?: `something`
 - NETLIFY_SITE_ID?: `something`
 
+### Docker Build Args
+
+> docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ secrets.MONGO_URI }}" --build-arg FIREBASE_SA="${{ secrets.FIREBASE_SA }}"
+
+- FIREBASE_SA: `{}`
+- NODE_ENV: `production`
+- MONGO_URI: `mongodb+srv://username:password@cluster0.4dxvdyw.mongodb.net`
+
 ### Application Env
 
-- FIREBASE_CLIENT_EMAIL: `firebase-adminsdk-dsdsdsd@librarysoftware-asdasd.iam.gserviceaccount.com`
-- FIREBASE_PRIVATE_KEY: `-----BEGIN_PRIVATE_KEY-----\acdsddsd=\n-----END_PRIVATE_KEY-----\n`
-- FIREBASE_PROJECT_ID: `appname`
-- MONGO_URI: `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@cluster0.xyz.mongodb.net`
+- FIREBASE_SA: `${FIREBASE_SA}`
 - KAFKA_ID: `appname`
 - DATABASE: `appname`
+- MONGO_URI: `${MONGO_URI}`
 - KAFKA_1: `kafka:9092`
 - JWT_KEY: `something`
 - PORT: `8080`
-
-### Docker Build Args
-
-> docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg DB_USERNAME="${{ secrets.MONGODB_USERNAME }}" --build-arg DB_PASSWORD="${{ secrets.MONGODB_PASSWORD }}"
-
-- MONGODB_USERNAME: `username`
-- MONGODB_PASSWORD: `password`
-- FIREBASE_PROJECT_ID=`appname`
-- FIREBASE_PRIVATE_KEY=`-----BEGIN_PRIVATE_KEY-----\acdsddsd=\n-----END_PRIVATE_KEY-----\n`
-- FIREBASE_CLIENT_EMAIL=`firebase-adminsdk-dsdsdsd@librarysoftware-asdasd.iam.gserviceaccount.com`
 
 ### Important
 
@@ -78,13 +76,31 @@ Create these branches: `master`, `stage`, `prod`
 
 - Create a project
 - Generate a new private key
-- Copy the code from downloaded file and place inside firebase.json file
+- Copy the entire json content and stringify that and place inside .env file. NOTE: replace **'\\\n' to '\n'**
+
+```bash
+https://jsonformatter.org/json-stringify-online
+
+- replace all \\n  -> \n
+- replace all \r\n -> empty
+
+- set FIREBASE_SA="{ \"type\": \"service_account\", \"universe_domain\": \"googleapis.com\"}"
+```
 
 ### Mongodb Atlas Setup
 
 - Create cluster
 - Create index on collection
 - Do whatever else you want to do
+
+### CICD Process
+
+- push the code
+- add the repo secrets
+- set null to all secrets which has no value just yet
+- run manual deploy publish workflow
+- get the render details
+- update the repo secrets
 
 ### Render Issue
 

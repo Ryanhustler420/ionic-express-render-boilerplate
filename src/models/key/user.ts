@@ -75,6 +75,7 @@ const userSchema = new mongoose.Schema(
         delete ret.password;
       },
     },
+    timestamps: true,
   }
 );
 

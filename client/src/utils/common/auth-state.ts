@@ -17,7 +17,7 @@ export default class AuthState {
     validateUser() {
         let token = this.getToken();
         let user = this.getUser() as IPreviewUser;
-        if (user && token) return true;
+        if (user != null && token != null) return true;
         return false;
     };
 

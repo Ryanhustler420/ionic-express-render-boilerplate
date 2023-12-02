@@ -7,9 +7,7 @@ import {
   PORT,
   DATABASE,
   MONGO_URI,
-  FIREBASE_PROJECT_ID,
-  FIREBASE_PRIVATE_KEY,
-  FIREBASE_CLIENT_EMAIL,
+  FIREBASE_SA
 } from "./env";
 
 const server = http.createServer(app);
@@ -35,11 +33,7 @@ appNS.on("connection", (socket) => {
 const start = async () => {
   try {
     admin.initializeApp({
-      credential: admin.credential.cert({
-        clientEmail: FIREBASE_CLIENT_EMAIL,
-        privateKey: FIREBASE_PRIVATE_KEY,
-        projectId: FIREBASE_PROJECT_ID,
-      }),
+      credential: admin.credential.cert(JSON.parse(FIREBASE_SA)),
     });
     // kafkaWrapper.init(KAFKA_ID, [KAFKA_1]);
     await mongoose.connect(`${MONGO_URI}/${DATABASE}`);

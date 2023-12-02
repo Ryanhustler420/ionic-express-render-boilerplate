@@ -12,7 +12,7 @@ jobs:
   #     CI: true # for non-watch test mode
   #   steps:
   #     - name: ⬇️ Get the code
-  #       uses: actions/checkout@v3
+  #       uses: actions/checkout@v4
   #     - name: ⚙️ Load & Cache Dependencies
   #       uses: ./.github/actions/cached-deps
   #       with:
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Get the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: ⚙️ Load & Cache Dependencies
         uses: ./.github/actions/cached-deps
         with:
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Get the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: ⚙️ Load & Cache Dependencies
         uses: ./.github/actions/cached-deps
         with:
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Get the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: ⚙️ Load & Cache Dependencies
         uses: ./.github/actions/cached-deps
         with:
@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Get the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: ⚙️ Load & Cache Dependencies for client
         uses: ./.github/actions/cached-deps
         with:
@@ -74,10 +74,11 @@ jobs:
       - name: ⚒️ Build Server
         run: npm run build
       - name: 🐟 Building docker image
-        run: docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg DB_USERNAME="${{ secrets.MONGODB_USERNAME }}" --build-arg DB_PASSWORD="${{ secrets.MONGODB_PASSWORD }}" --build-arg FIREBASE_PROJECT_ID="${{ secrets.FIREBASE_PROJECT_ID }}" --build-arg FIREBASE_PRIVATE_KEY="${{ secrets.FIREBASE_PRIVATE_KEY }}" --build-arg FIREBASE_CLIENT_EMAIL="${{ secrets.FIREBASE_CLIENT_EMAIL }}"
+        # FIREBASE_SA='{}' that's why not quotation
+        run: docker build -f Dockerfile.prod -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg NODE_ENV="production" --build-arg MONGO_URI="${{ secrets.MONGO_URI }}" --build-arg FIREBASE_SA=${{ secrets.FIREBASE_SA }}
       - name: 🏡 Run the docker image locally
         run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
       - name: 💤 Sleep for 30 seconds
         run: sleep 30
       - name: 📞 Calling the api
-        run: curl http://localhost:${{ env.PORT }}/api
+        run: curl http://localhost:${{ env.PORT }}

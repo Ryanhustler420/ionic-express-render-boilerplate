@@ -1,9 +1,9 @@
-import { NODE_ENV } from "../env";
+import { ENV } from "../env";
 
 // Subdomain can share this cookie
 export default {
   //   domain: ".xcodeclazz-questions.com",
-  secure: NODE_ENV !== "test",
+  secure: ENV() !== "test",
   //   sameSite: "none",
   //   httpOnly: true,
   signed: false,

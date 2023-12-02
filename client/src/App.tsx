@@ -71,8 +71,11 @@ const App: React.FC = () => {
 
   useEffect(() => {
     let isAuthenticated = authState.validateUser();
-    if (!isAuthenticated) historyMethodsIPCRef.current?.clearAndGoto(components.settings.path);
-    else if (window.location.pathname == components.settings.path) historyMethodsIPCRef.current?.clearAndGoto(components.home.path);
+    // if (!isAuthenticated && window.location.pathname == components.login.path) historyMethodsIPCRef.current?.clearAndGoto(components.login.path);
+    // else if (!isAuthenticated && window.location.pathname == components.register.path) historyMethodsIPCRef.current?.clearAndGoto(components.register.path);
+    // else if (isAuthenticated && window.location.pathname == components.login.path) historyMethodsIPCRef.current?.clearAndGoto(components.home.path);
+    // else if (isAuthenticated && window.location.pathname == components.register.path) historyMethodsIPCRef.current?.clearAndGoto(components.home.path);
+    // else if (!isAuthenticated) historyMethodsIPCRef.current?.clearAndGoto(components.login.path);
   });
 
   return (
