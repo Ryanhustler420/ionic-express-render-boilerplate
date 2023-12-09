@@ -1,7 +1,6 @@
-import http from "http";
 import { app } from "./app";
+import sockets from "./sockets";
 import mongoose from "mongoose";
-import socketIO from "socket.io";
 import admin from "firebase-admin";
 import {
   PORT,
@@ -10,25 +9,7 @@ import {
   FIREBASE_SA
 } from "./env";
 
-const server = http.createServer(app);
-const io = new socketIO.Server(server, {
-  cors: { origin: "*" },
-  path: "/deep/socket",
-});
-
-const appNS = io.of("/appname");
-appNS.on("connection", (socket) => {
-  appNS.emit("joined", `joined ${socket.id}`);
-
-  socket.on("message", (message) => {
-    console.log(`${socket.id} has sent: ${message}`);
-    appNS.except(socket.id).emit("delivered", true);
-  });
-
-  socket.on("disconnect", () => {
-    console.log(`${socket.id} has left`);
-  });
-});
+const server = sockets(app);
 
 const start = async () => {
   try {

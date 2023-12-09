@@ -32,7 +32,7 @@ app.use(userLogoutRouter);
 app.use(userLoginRouter);
 
 app.get("/", (req, res) => {
-  if (process.env.ENV === "production") {
+  if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
   } else res.json({ message: "hello" });
 });

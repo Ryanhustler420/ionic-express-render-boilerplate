@@ -114,5 +114,3 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - name: ➕ Push image to docker
         run: docker push ${{ secrets.DOCKER_IMAGE_NAME }}
-      - name: 💬 Message
-        run: echo "${{ steps.render-deployer.outputs.response }}"

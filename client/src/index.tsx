@@ -11,6 +11,8 @@ import { switchDark } from './utils/common/helper';
 import { PREFERENCE_KEYS, getPreference } from './utils/common/cache';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
+import "./index.css";
+
 getPreference(PREFERENCE_KEYS.DARK_MODE).then(data => {
   const isDark = data.value === 'true';
   switchDark(isDark);
