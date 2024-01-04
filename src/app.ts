@@ -7,34 +7,42 @@ import cookieSession from "cookie-session";
 import cookieConfig from "./services/cookie-config";
 import cors from "cors";
 
-import { errorHandler } from "@xcc.com/xcc-common";
-import { celebrate_custome_errors } from "@xcc.com/xcc-celebrate";
+import { errorHandler } from "@com.xcodeclazz/monolithic-common";
+import { celebrate_custome_errors } from "@com.xcodeclazz/celebrate";
 
-import { showUserCurrentRouter } from "./routes/show-user-current";
-import { dropCollectionsRouter } from "./routes/drop-collections";
-import { healthChecksRouter } from "./routes/health-checks";
-import { userRegisterRouter } from "./routes/user-register";
-import { userLogoutRouter } from "./routes/user-logout";
-import { userLoginRouter } from "./routes/user-login";
+import { authDropCollectionsRouter } from "./routes/auth/drop-collections";
+import { authShowUserCurrentRouter } from "./routes/auth/show-user-current";
+import { authUserAdminRemoveRouter } from "./routes/auth/user-admin-remove";
+import { authUserAdminMakeRouter } from "./routes/auth/user-admin-make";
+import { authUserRegisterRouter } from "./routes/auth/user-register";
+import { authUserLogoutRouter } from "./routes/auth/user-logout";
+import { authUserLoginRouter } from "./routes/auth/user-login";
+import { authMetricsRouter } from "./routes/auth/metrics";
 
 const app = express();
 app.use(json());
 app.set("trust proxy", true);
 app.use(cors({ origin: "*", exposedHeaders: ["base64"] }));
 app.use(cookieSession(cookieConfig));
+if (process.env.NODE_ENV === "production") app.use(express.static(path.join(__dirname, "..", "client", "build")));
 
-app.use(express.static(path.join(__dirname, "..", "client", "build")));
-app.use(showUserCurrentRouter);
-app.use(dropCollectionsRouter);
-app.use(healthChecksRouter);
-app.use(userRegisterRouter);
-app.use(userLogoutRouter);
-app.use(userLoginRouter);
+////////////
+// WARNING: PLEASE DON'T CHANGE THE ROUTE ORDER
+////////////
+
+app.use(authShowUserCurrentRouter);
+app.use(authUserRegisterRouter);
+app.use(authUserAdminRemoveRouter);
+app.use(authUserLogoutRouter);
+app.use(authUserLoginRouter);
+app.use(authUserAdminMakeRouter);
+app.use(authDropCollectionsRouter);
+app.use(authMetricsRouter);
 
 app.get("/", (req, res) => {
   if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
-  } else res.json({ message: "hello" });
+  } else res.json({ message: "NO UI FOUND" });
 });
 
 app.all("*", async (req, res) => {

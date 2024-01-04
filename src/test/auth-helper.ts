@@ -1,8 +1,29 @@
-import { Roles, newObjectId } from "@xcc.com/xcc-common";
+import { Roles, newObjectId } from "@com.xcodeclazz/monolithic-common";
+import { DUMMY_USER_ATTRS } from "@com.xcodeclazz/monolithic-common";
 import { JWT_KEY } from "../env";
+import request from "supertest";
 import jwt from "jsonwebtoken";
+import { app } from "../app";
+import _ from "lodash";
 
-export const register = async (roles: Roles[], id?: string) => {
+const email = "example@test.com";
+const password = "password";
+
+export const register = async () => {
+  const payload = DUMMY_USER_ATTRS(email, password);
+  _.unset(payload, "roles");
+  _.unset(payload, "is_banned");
+
+  const response = await request(app)
+    .post("/api/auth/register")
+    .send(payload)
+    .expect(201);
+
+  const cookie = response.get("Set-Cookie");
+  return { user: response.body, cookie };
+};
+
+export const register2 = async (roles: Roles[], id?: string) => {
   // Build a JWT payload. { id, email }
   const payload = {
     id: id || newObjectId(),
@@ -26,7 +47,7 @@ export const register = async (roles: Roles[], id?: string) => {
   return [`session=${base64}`];
 };
 
-export const register2 = async (user: any, id?: string) => {
+export const register3 = async (user: any, id?: string) => {
   // Build a JWT payload. { id, email }
   const payload = {
     id: id || newObjectId(),

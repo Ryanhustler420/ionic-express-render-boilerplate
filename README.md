@@ -1,111 +1,64 @@
 # Appname
 
-🔗 [Website](https://appname.onrender.com)
-
 Your description
 
 ### Requirement
 
-Create these branches: `master`, `stage`, `prod`
+Create these branches: `master`, `stage`, `production`
 
-[Render](https://render.com) profile
+## **[Docker](https://hub.docker.com)** profile
 
-| email             | method | Service | Image        |
-| ----------------- | ------ | ------- | ------------ |
-| example@gmail.com | github | Docker  | repo/appname |
+| username  | Password           | Image(s)                     |
+| --------- | ------------------ | ---------------------------- |
+| Myname123 | SomethingSomething | myname123/appname-stage      |
+| Myname456 | SomethingSomething | myname456/appname-production |
 
-[Docker](https://hub.docker.com) profile
+## **[Render](https://render.com)** profile
 
-| username | method |
-| -------- | ------ |
-| repo     | email  |
+| email               | Password           | Image                        |
+| ------------------- | ------------------ | ---------------------------- |
+| Myname123@domain.me | SomethingSomething | myname123/appname-stage      |
+| Myname456@domain.me | SomethingSomething | myname456/appname-production |
 
-[Cronjobs](https://cron-job.org/)
+## **[MongoDB](https://www.mongodb.com)** profile
 
-| username         | method |
-| ---------------- | ------ |
-| example@test.com | email  |
+> **Allow Access From Anywhere**
 
-[Firebase](https://console.firebase.google.com/)
+| email               | Password           | Database   |
+| ------------------- | ------------------ | ---------- |
+| Myname123@domain.me | SomethingSomething | Stage      |
+| Myname456@domain.me | SomethingSomething | Production |
 
-| email            | project |
-| ---------------- | ------- |
-| example@test.com | appname |
+## Workflow Env
 
-### Workflow Env
+> You can pre create these, since these details are not tighly coupled with this repository
 
-- MONGO_URI: `something`
-- FIREBASE_SA: `{}`
-- RENDER_SERVER_HOST_URL: `https://abc-xyz.onrender.com`
-- RENDER_APP_SERVICE_ID: `srv-cgnlgo61101c73al966g`
-- RENDER_PROFILE_AUTH_API_TOKEN: `rnd_xkQiKV...`
-- DOCKER_IMAGE_NAME: `prof/app:latest`
-- DOCKER_PASSWORD: `admin123`
-- DOCKER_USERNAME: `user69`
-- SLACK_WEBHOOK_URL: `https://something`
-- NETLIFY_AUTH_TOKEN?: `something`
-- NETLIFY_SITE_ID?: `something`
+- WF\_<span style="color:lightblue;">**SLACK**</span>\_WEBHOOK_URL : `null`
+- WF\_<span style="color:red;">**DOCKER**</span>\_STAGE_ACCOUNT_USERNAME : `myname123`
+- WF\_<span style="color:red;">**DOCKER**</span>\_STAGE_ACCOUNT_PASSWORD : `SomethingSomething`
+- WF\_<span style="color:red;">**DOCKER**</span>\_STAGE_IMAGE_NAME : `myname123/appname-stage`
+- WF\_<span style="color:red;">**DOCKER**</span>\_PRODUCTION_ACCOUNT_USERNAME : `myname456`
+- WF\_<span style="color:red;">**DOCKER**</span>\_PRODUCTION_ACCOUNT_PASSWORD : `SomethingSomething`
+- WF\_<span style="color:red;">**DOCKER**</span>\_PRODUCTION_IMAGE_NAME : `myname456/appname-production`
+- WF\_<span style="color:yellow;">**MONGODB**</span>\_STAGE_DATABASE_NAME : `appname-stage`
+- WF\_<span style="color:yellow;">**MONGODB**</span>\_PRODUCTION_DATABASE_NAME : `appname-production`
+- WF\_<span style="color:yellow;">**MONGODB**</span>\_PRODUCTION_URI : `mongodb+srv://username:<password>@cluster0.production.mongodb.net`
+- WF\_<span style="color:yellow;">**MONGODB**</span>\_STAGE_URI : `mongodb+srv://username:<password>@cluster0.stage.mongodb.net`
 
-### Docker Build Args
+> Once you have docker image on dockerhub
 
-> docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ secrets.MONGO_URI }}" --build-arg FIREBASE_SA="${{ secrets.FIREBASE_SA }}"
+- WF\_<span style="color:green;">**RENDER**</span>\_STAGE_APP_SERVICE_ID : `null`
+- WF\_<span style="color:green;">**RENDER**</span>\_PRODUCTION_APP_SERVICE_ID : `null`
+- WF\_<span style="color:green;">**RENDER**</span>\_STAGE_PROFILE_AUTH_API_TOKEN : `null`
+- WF\_<span style="color:green;">**RENDER**</span>\_PRODUCTION_PROFILE_AUTH_API_TOKEN : `null`
 
-- FIREBASE_SA: `{}`
-- NODE_ENV: `production`
-- MONGO_URI: `mongodb+srv://username:password@cluster0.4dxvdyw.mongodb.net`
+## Keep in mind
 
-### Application Env
+- Update your repository secrets
+- Make your mongodb accessed from anywhere
+- Make your docker image private once they published
+- Use lower case for login and building docker images
 
-- FIREBASE_SA: `${FIREBASE_SA}`
-- KAFKA_ID: `appname`
-- DATABASE: `appname`
-- MONGO_URI: `${MONGO_URI}`
-- KAFKA_1: `kafka:9092`
-- JWT_KEY: `something`
-- PORT: `8080`
+### Rollback
 
-### Important
-
-- It wakes up the render server
-- It has three stage
-  - ci [skip ci]
-  - stage
-  - prod
-
-### Firebase Setup
-
-- Create a project
-- Generate a new private key
-- Copy the entire json content and stringify that and place inside .env file. NOTE: replace **'\\\n' to '\n'**
-
-```bash
-https://jsonformatter.org/json-stringify-online
-
-- replace all \\n  -> \n
-- replace all \r\n -> empty
-
-- set FIREBASE_SA="{ \"type\": \"service_account\", \"universe_domain\": \"googleapis.com\"}"
-```
-
-### Mongodb Atlas Setup
-
-- Create cluster
-- Create index on collection
-- Do whatever else you want to do
-
-### CICD Process
-
-- push the code
-- add the repo secrets
-- set null to all secrets which has no value just yet
-- run manual deploy publish workflow
-- get the render details
-- update the repo secrets
-
-### Render Issue
-
-- [Add Custom Domain](https://community.render.com/t/what-could-cause-the-certificate-pending-for-the-new-custom-domain/1091/2)
-
-### Todo
-
-- Improve the app workflows
+- Todo

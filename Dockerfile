@@ -1,20 +1,15 @@
-FROM node:18-alpine
+FROM node:20
 
-# docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ secrets.MONGO_URI }}" --build-arg FIREBASE_SA="${{ secrets.FIREBASE_SA }}"
-# docker run -d -p 3000:3000 -e ELSE=something application
 ARG MONGO_URI=mongodb+srv://username:password@cluster0.4dxvdyw.mongodb.net
-ARG FIREBASE_SA='{"type":"service_account","project_id":"librarysoftware-5765","private_key_id":"xxx","private_key":"-----BEGIN PRIVATE KEY-----\n*\n-----END PRIVATE KEY-----\n","client_email":"xxx@librarysoftware-xxx.iam.gserviceaccount.com","client_id":"980","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url":"https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-756%40librarysoftware-546.iam.gserviceaccount.com","universe_domain":"googleapis.com"}'
 ARG NODE_ENV=development
+ARG DATABASE=appname
 
 # Please dont change this here, You can change this via outside
 ENV NODE_ENV=${NODE_ENV}
 
 # Set environment variables
 ENV MONGO_URI=${MONGO_URI}
-ENV FIREBASE_SA=${FIREBASE_SA}
-ENV KAFKA_ID=appname
-ENV DATABASE=appname
-ENV KAFKA_1=kafka:9092
+ENV DATABASE=${DATABASE}
 ENV JWT_KEY=something
 ENV PORT=8080
 
@@ -22,6 +17,12 @@ WORKDIR /app
 COPY package*.json .
 COPY tsconfig.json .
 
+RUN apt-get update
+RUN apt-get -y install nano
+RUN curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz \
+    && tar xzf node_exporter-1.2.2.linux-amd64.tar.gz \
+    && cp node_exporter-1.2.2.linux-amd64/node_exporter /usr/local/bin/ \
+    && rm -rf node_exporter-1.2.2.linux-amd64 node_exporter-1.2.2.linux-amd64.tar.gz
 RUN npm install
 
 COPY . .

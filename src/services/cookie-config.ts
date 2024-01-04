@@ -2,7 +2,7 @@ import { ENV } from "../env";
 
 // Subdomain can share this cookie
 export default {
-  //   domain: ".xcodeclazz-questions.com",
+  //   domain: ".xcodeclazz.com",
   secure: ENV() !== "test",
   //   sameSite: "none",
   //   httpOnly: true,

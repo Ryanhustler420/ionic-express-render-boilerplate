@@ -1,38 +1,10 @@
 name: CI
-env: { PORT: 8080, Group: CI }
+env: { STAGE_PORT: 8081, CONTAINER_PORT: 8080 }
 on:
   workflow_dispatch:
   push:
-    branches:
-      - "feature-*"
 jobs:
-  # client-test:
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     CI: true # for non-watch test mode
-  #   steps:
-  #     - name: ⬇️ Get the code
-  #       uses: actions/checkout@v4
-  #     - name: ⚙️ Load & Cache Dependencies
-  #       uses: ./.github/actions/cached-deps
-  #       with:
-  #         prefix: client
-  #     - name: 🧪 Test
-  #       run: npm run test --prefix client
-  client-build:
-    # needs: [client-test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Get the code
-        uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: client
-      - name: ⚒️ Build
-        run: npm run build --prefix client
   server-test:
-    needs: [client-build]
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Get the code
@@ -43,42 +15,32 @@ jobs:
           prefix: .
       - name: 🧪 Test
         run: npm run test:ci
-  server-build:
+  dockerize:
     needs: [server-test]
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: toor
+    env:
+      MONGODB_CLUSTER_ADDRESS: 127.0.0.1:27017 # mongodb, if ports not mentioned
     steps:
       - name: ⬇️ Get the code
         uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: .
-      - name: ⚒️ Build
-        run: npm run build
-  dockerize:
-    needs: [server-build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Get the code
-        uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies for client
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: client
-      - name: ⚒️ Build client
-        run: npm run build --prefix client
-      - name: ⚙️ Load & Cache Dependencies for server
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: .
-      - name: ⚒️ Build Server
-        run: npm run build
-      - name: 🐟 Building docker image
-        # FIREBASE_SA='{}' that's why not quotation
-        run: docker build -f Dockerfile.prod -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg NODE_ENV="production" --build-arg MONGO_URI="${{ secrets.MONGO_URI }}" --build-arg FIREBASE_SA=${{ secrets.FIREBASE_SA }}
-      - name: 🏡 Run the docker image locally
-        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: 🐟 Build stage image
+        run: docker build -f Dockerfile.prod -t "${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ env.MONGODB_CLUSTER_ADDRESS }}" --build-arg NODE_ENV="production" --build-arg DATABASE="${{ secrets.WF_MONGODB_STAGE_DATABASE_NAME }}"
+      - name: 🏡 Run stage image
+        run: docker run -d -p ${{ env.STAGE_PORT }}:${{ env.CONTAINER_PORT }} ${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}
       - name: 💤 Sleep for 30 seconds
         run: sleep 30
-      - name: 📞 Calling the api
-        run: curl http://localhost:${{ env.PORT }}
+      - name: 📞 Calling stage api
+        run: curl http://localhost:${{ env.STAGE_PORT }}/api/currentuser
+      - name: 💬 Sending Notification
+        uses: gh-actions-projects/slack-messenger@v1.0.0
+        with:
+          webhook_url: ${{ secrets.WF_SLACK_WEBHOOK_URL }}
+          payload: ✅ Working!, Now Stage This 👉 Link!!!

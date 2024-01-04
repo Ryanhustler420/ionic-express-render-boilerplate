@@ -1,43 +1,44 @@
 import mongoose from "mongoose";
 import { Password } from "../../services/password";
+import { Genders, Roles } from "@com.xcodeclazz/monolithic-common";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
-// An interface that describe the properties
-// that are required to create a new User
 export interface UserAttrs {
-  email: string;
-  password: string;
-  name: string;
-  phone: string;
-  avatar: string;
   address: string;
+  country: string;
+  gender: Genders;
+  avatar: string;
+  phone: string;
+  state: string;
+  email: string;
+  name: string;
+  city: string;
+  dob: string;
+  roles?: Roles[];
+  password?: string;
   is_banned?: boolean;
 }
 
-// An interface that describes the properties
-// that a User Modal has
-interface UserModel extends mongoose.Model<UserDoc> {
-  build(attrs: UserAttrs): UserDoc;
-  findByEvent(event: { id: string; version: number }): Promise<UserDoc | null>;
-}
-
-// An interface that describes the properties
-// that a User Document has
-export interface UserDoc extends mongoose.Document {
-  email: string;
-  password: string;
-  name: string;
-  phone: string;
-  avatar: string;
-  address: string;
-  is_banned?: boolean;
+export interface UserMongoDocument extends mongoose.Document, UserAttrs {
   version: number;
   isBanned(): Promise<boolean>;
+}
+
+interface UserModel extends mongoose.Model<UserMongoDocument> {
+  build(attrs: UserAttrs): UserMongoDocument;
+  findByEvent(event: {
+    id: string;
+    version: number;
+  }): Promise<UserMongoDocument | null>;
 }
 
 const userSchema = new mongoose.Schema(
   {
     email: {
+      type: String,
+      required: true,
+    },
+    password: {
       type: String,
       required: true,
     },
@@ -49,6 +50,23 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    city: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+    },
+    dob: {
+      type: String,
+      required: true,
+    },
+    gender: {
+      type: String,
+      required: true,
+      enum: Genders,
+    },
     avatar: {
       type: String,
       required: true,
@@ -57,9 +75,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    password: {
+    state: {
       type: String,
       required: true,
+    },
+    roles: {
+      type: [Number],
+      required: true,
+      enum: Roles,
     },
     is_banned: {
       type: Boolean,
@@ -105,5 +128,5 @@ userSchema.methods.isBanned = async function () {
   return this.is_banned;
 };
 
-const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
+const User = mongoose.model<UserMongoDocument, UserModel>("User", userSchema);
 export { User };

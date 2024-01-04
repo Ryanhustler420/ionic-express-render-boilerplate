@@ -1,5 +1,5 @@
 name: Stage
-env: { PORT: 8080, Group: Stage }
+env: { CONTAINER_PORT: 8080, STAGE_PORT: 8081 }
 on:
   workflow_dispatch:
   pull_request:
@@ -13,34 +13,9 @@ jobs:
     steps:
       - name: Check Pull Request Merge
         run: echo "Ran the code"
-  # client-test:
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     CI: true # for non-watch test mode
-  #   steps:
-  #     - name: ⬇️ Get the code
-  #       uses: actions/checkout@v4
-  #     - name: ⚙️ Load & Cache Dependencies
-  #       uses: ./.github/actions/cached-deps
-  #       with:
-  #         prefix: client
-  #     - name: 🧪 Test
-  #       run: npm run test --prefix client
-  client-build:
+  server-test:
     needs: merge_check
     if: needs.merge_check.outputs.merged == 'true' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Get the code
-        uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: client
-      - name: ⚒️ Build
-        run: npm run build --prefix client
-  server-test:
-    needs: [client-build]
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Get the code
@@ -51,130 +26,37 @@ jobs:
           prefix: .
       - name: 🧪 Test
         run: npm run test:ci
-  server-build:
+  dockerize-and-publish:
     needs: [server-test]
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Get the code
         uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: .
-      - name: ⚒️ Build
-        run: npm run build
-  dockerize:
-    needs: [server-build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Get the code
-        uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies for client
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: client
-      - name: ⚒️ Build client
-        run: npm run build --prefix client
-      - name: ⚙️ Load & Cache Dependencies for server
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: .
-      - name: ⚒️ Build Server
-        run: npm run build
-      - name: 🐟 Building docker image
-        # FIREBASE_SA='{}' that's why not quotation
-        run: docker build -f Dockerfile.prod -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg NODE_ENV="production" --build-arg MONGO_URI="${{ secrets.MONGO_URI }}" --build-arg FIREBASE_SA=${{ secrets.FIREBASE_SA }}
-      - name: 🏡 Run the docker image locally
-        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: 🐟 Build stage image
+        run: docker build -f Dockerfile.prod -t "${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ secrets.WF_MONGODB_STAGE_URI }}" --build-arg NODE_ENV="production" --build-arg DATABASE="${{ secrets.WF_MONGODB_STAGE_DATABASE_NAME }}"
+      - name: 🏡 Run stage image
+        run: docker run -d -p ${{ env.STAGE_PORT }}:${{ env.CONTAINER_PORT }} ${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}
       - name: 💤 Sleep for 30 seconds
         run: sleep 30
-      - name: 📞 Calling the api
-        run: curl http://localhost:${{ env.PORT }}
-  uploading-docker-image:
-    needs: [dockerize]
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Get the code
-        uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies for client
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: client
-      - name: ⚒️ Build client
-        run: npm run build --prefix client
-      - name: ⚙️ Load & Cache Dependencies for server
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: .
-      - name: ⚒️ Build Server
-        run: npm run build
-      - name: 🐟 Building docker image
-        # FIREBASE_SA='{}' that's why not quotation
-        run: docker build -f Dockerfile.prod -t "${{ secrets.DOCKER_IMAGE_NAME }}" . --build-arg NODE_ENV="production" --build-arg MONGO_URI="${{ secrets.MONGO_URI }}" --build-arg FIREBASE_SA=${{ secrets.FIREBASE_SA }}
-      - name: 🏡 Run the docker image locally
-        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
-      - name: 💤 Sleep for 30 seconds
-        run: sleep 30
-      - name: 📞 Calling the api
-        run: curl http://localhost:${{ env.PORT }}
-      # Docker push begins
-      - name: 🚪 Docker login
+      - name: 📞 Calling stage api
+        run: curl http://localhost:${{ env.STAGE_PORT }}/api/currentuser
+      - name: 2️⃣ Docker stage account login
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - name: ➕ Push image to docker
-        run: docker push ${{ secrets.DOCKER_IMAGE_NAME }}
-      - name: ⚠️ Deploy Trigger
-        id: render-deployer
+          DOCKER_USERNAME: ${{ secrets.WF_DOCKER_STAGE_ACCOUNT_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.WF_DOCKER_STAGE_ACCOUNT_PASSWORD }}
+      - name: 🌩️ Push stage image to docker hub
+        run: docker push ${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}
+      - name: 2️⃣ Docker stage account logout
+        run: docker logout
+      - name: ⚠️ Stage Deploy Trigger
+        id: render-stage-deployer
         uses: OneHox/render-deploy-api@v1.0.0
         with:
-          serviceId: ${{ secrets.RENDER_APP_SERVICE_ID }}
-          bearer: ${{ secrets.RENDER_PROFILE_AUTH_API_TOKEN }}
-      - name: 💬 Message
-        run: echo "${{ steps.render-deployer.outputs.response }}"
-  should-upload-to-netlify:
-    needs: [uploading-docker-image]
-    runs-on: ubuntu-latest
-    env:
-      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      RENDER_SERVER_HOST_URL: ${{ secrets.RENDER_SERVER_HOST_URL }}
-    outputs:
-      ok: ${{ steps.verifying.outputs.ok }}
-    steps:
-      - id: verifying
-        name: "🚦Verifying"
-        if: ${{ env.NETLIFY_SITE_ID && env.NETLIFY_AUTH_TOKEN && env.RENDER_SERVER_HOST_URL }}
-        run: echo "::set-output name=ok::true"
-  uploading-to-netlify:
-    needs: [should-upload-to-netlify]
-    if: ${{ needs.should-upload-to-netlify.outputs.ok == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Get the code
-        uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies for client
-        uses: ./.github/actions/cached-deps
+          serviceId: ${{ secrets.WF_RENDER_STAGE_APP_SERVICE_ID }}
+          bearer: ${{ secrets.WF_RENDER_STAGE_PROFILE_AUTH_API_TOKEN }}
+      - name: 💬 Sending Notification
+        uses: gh-actions-projects/slack-messenger@v1.0.0
         with:
-          prefix: client
-      - name: 💉 Injecting Variables
-        run: cd client && node inject-env.ts --host=${{ secrets.RENDER_SERVER_HOST_URL }}
-      - name: ⚒️ Build client
-        run: npm run build --prefix client
-      - name: 🗾 Generating Redirects
-        run: npm run netlify-redirect --prefix client
-      - id: deploy
-        continue-on-error: true
-        name: 🪴 Deploying on netlify
-        uses: ./.github/actions/netlify
-        with:
-          dir: "client/build"
-          branch: ${{ github.ref_name }}
-          site-id: ${{ secrets.NETLIFY_SITE_ID }}
-          auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - if: steps.deploy.outcome == 'success'
-        run: echo "Site deployed"
-      - if: steps.deploy.outcome == 'failure'
-        run: echo "Site failed"
+          webhook_url: ${{ secrets.WF_SLACK_WEBHOOK_URL }}
+          payload: ✅ Application Staged!

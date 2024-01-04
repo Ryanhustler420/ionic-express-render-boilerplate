@@ -1,26 +1,24 @@
 import { app } from "./app";
 import sockets from "./sockets";
 import mongoose from "mongoose";
-import admin from "firebase-admin";
-import {
-  PORT,
-  DATABASE,
-  MONGO_URI,
-  FIREBASE_SA
-} from "./env";
+import { spawn } from "child_process";
+import { PORT, DATABASE, MONGO_URI } from "./env";
 
 const server = sockets(app);
 
 const start = async () => {
   try {
-    admin.initializeApp({
-      credential: admin.credential.cert(JSON.parse(FIREBASE_SA)),
-    });
-    // kafkaWrapper.init(KAFKA_ID, [KAFKA_1]);
     await mongoose.connect(`${MONGO_URI}/${DATABASE}`);
     console.log("Connected to MongoDB");
+    spawn("/usr/local/bin/node_exporter", {
+      detached: false,
+      stdio: "inherit",
+    }).unref();
   } catch (err) {
-    console.log(err);
+    console.error("====================================");
+    // @ts-ignore
+    console.error(err?.message);
+    console.error("====================================");
   }
 
   const HOST = "0.0.0.0";
