@@ -33,7 +33,7 @@ Create these branches: `master`, `stage`, `production`
 
 > You can pre create these, since these details are not tighly coupled with this repository
 
-- WF\_<span style="color:lightblue;">**SLACK**</span>\_WEBHOOK_URL : `null`
+- WF\_<span style="color:lightblue;">**DISCORD**</span>\_WEBHOOK_URL : `null`
 - WF\_<span style="color:red;">**DOCKER**</span>\_STAGE_ACCOUNT_USERNAME : `myname123`
 - WF\_<span style="color:red;">**DOCKER**</span>\_STAGE_ACCOUNT_PASSWORD : `SomethingSomething`
 - WF\_<span style="color:red;">**DOCKER**</span>\_STAGE_IMAGE_NAME : `myname123/appname-stage`
