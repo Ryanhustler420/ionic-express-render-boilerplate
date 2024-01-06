@@ -44,6 +44,8 @@ Create these branches: `master`, `stage`, `production`
 - WF\_<span style="color:yellow;">**MONGODB**</span>\_PRODUCTION_DATABASE_NAME : `appname-production`
 - WF\_<span style="color:yellow;">**MONGODB**</span>\_PRODUCTION_URI : `mongodb+srv://username:<password>@cluster0.production.mongodb.net`
 - WF\_<span style="color:yellow;">**MONGODB**</span>\_STAGE_URI : `mongodb+srv://username:<password>@cluster0.stage.mongodb.net`
+- WF\_<span style="color:green;">**ADMIN_PASSWORD**</span>\_STAGE : `Phpmyadmin920@`
+- WF\_<span style="color:green;">**ADMIN_PASSWORD**</span>\_PRODUCTION : `Phpmyadmin920@`
 
 > Once you have docker image on dockerhub
 

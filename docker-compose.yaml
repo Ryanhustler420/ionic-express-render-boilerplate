@@ -23,6 +23,7 @@ services:
       args:
         - DATABASE=appname
         - NODE_ENV=development
+        - ADMIN_PASSWORD=something
         - MONGO_URI=mongodb://mongodb
     restart: always
     ports:

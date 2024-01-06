@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile.prod
       args:
         - MONGO_URI=mongodb://mongodb
+        - ADMIN_PASSWORD=something
         - NODE_ENV=production
         - DATABASE=appname
     restart: always
