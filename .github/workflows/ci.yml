@@ -13,6 +13,7 @@ jobs:
         uses: ./.github/actions/cached-deps
         with:
           prefix: .
+          caching: "false"
       - name: 🧪 Test
         run: npm run test:ci
   dockerize:
