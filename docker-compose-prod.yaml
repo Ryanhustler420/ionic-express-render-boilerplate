@@ -1,14 +1,14 @@
-version: '3.8'
+version: '3.9'
 services:
-  bundle:
+  appname-backend:
     build:
       context: .
       dockerfile: Dockerfile.prod
       args:
-        - MONGO_URI=mongodb://mongodb
-        - ADMIN_PASSWORD=something
         - NODE_ENV=production
+        - ADMIN_PASSWORD=something
         - DATABASE=appname
+        - MONGO_URI=mongodb://appname-mongodb:27017
     restart: always
     ports:
       - "8080:8080"
@@ -22,16 +22,15 @@ services:
       - /app/dist
       - .:/app
     depends_on:
-      - mongodb
+      - appname-mongodb
 
-  mongodb:
+  appname-mongodb:
     image: mongo
-    hostname: mongodb
     restart: unless-stopped
     volumes:
-      - appname:/data/db/appname
+      - appname-mongodb:/data/db/appname
     ports:
       - "27017:27017"
 
 volumes:
-  appname:
+  appname-mongodb:
