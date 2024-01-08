@@ -5,13 +5,12 @@ import { BadRequestError } from "@com.xcodeclazz/monolithic-common";
 
 const router = express.Router();
 
-router.post("/api/auth/drop/collections", async (req, res) => {
+router.post("/api/common/drop/collections", async (req, res) => {
   if (ENV() == "development") {
     try {
       await User.deleteMany({});
       res.send({
-        key: ["User"], // Please mention which collection has droped from /key
-        backup: [], // Please mention which collection has droped from /backup
+        collections: ["User"],
       });
     } catch (error) {
       new BadRequestError("Error occurred while dropping collections");
@@ -21,4 +20,4 @@ router.post("/api/auth/drop/collections", async (req, res) => {
   }
 });
 
-export { router as authDropCollectionsRouter };
+export { router as commonDropCollectionsRouter };

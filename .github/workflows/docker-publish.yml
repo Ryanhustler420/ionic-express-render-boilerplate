@@ -13,8 +13,10 @@ jobs:
         with:
           prefix: .
           caching: "false"
-      - name: 🧪 Test
-        run: npm run test:ci
+      - name: 🧪 Test Auth Service
+        run: npm run test-auth:ci
+      - name: 🧪 Test Common Service
+        run: npm run test-common:ci
   dockerize-and-publish:
     needs: [server-test]
     runs-on: ubuntu-latest

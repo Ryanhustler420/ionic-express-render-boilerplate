@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test:ci": "jest",
-    "test": "jest --watchAll --no-cache --detectOpenHandles",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "dev": "concurrently \"npm run watch\" \"npm run dev --prefix client\"",
-    "watch": "cross-env NODE_ENV=development ts-node-dev --poll --respawn src/index.ts"
+    "watch": "cross-env NODE_ENV=development ts-node-dev --poll --respawn src/index.ts",    
+    "test-auth:ci": "jest --maxWorkers=8 --testTimeout=60000 --testPathPattern='src/routes/auth/__test__'",
+    "test-common:ci": "jest --maxWorkers=8 --testTimeout=60000 --testPathPattern='src/routes/common/__test__'",
+    "test-auth": "jest --maxWorkers=8 --testTimeout=60000 --watchAll --no-cache --detectOpenHandles --testPathPattern='src/routes/auth/__test__'",
+    "test-common": "jest --maxWorkers=8 --testTimeout=60000 --watchAll --no-cache --detectOpenHandles --testPathPattern='src/routes/common/__test__'"
   },
   "jest": {
     "preset": "ts-jest",
