@@ -38,7 +38,7 @@
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.2",
     "@com.xcodeclazz/celebrate": "^0.0.1",
-    "@com.xcodeclazz/monolithic-common": "^0.0.13",
+    "@com.xcodeclazz/monolithic-common": "^0.0.15",
     "axios": "^1.6.2",
     "concurrently": "^8.2.1",
     "cookie-session": "^2.0.0",

@@ -5,3 +5,11 @@
 *::-webkit-scrollbar {
   display: none;
 }
+
+pre {
+  font-family: inherit !important;
+}
+
+.ace_mobile-menu {
+  display: none !important;
+}
