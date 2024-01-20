@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "test-all:ci": "jest --maxWorkers=8 --testTimeout=1200000",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "dev": "concurrently \"npm run watch\" \"npm run dev --prefix client\"",
     "watch": "cross-env NODE_ENV=development ts-node-dev --poll --respawn src/index.ts",
@@ -38,7 +39,7 @@
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.2",
     "@com.xcodeclazz/celebrate": "^0.0.1",
-    "@com.xcodeclazz/monolithic-common": "^0.0.15",
+    "@com.xcodeclazz/monolithic-common": "^0.0.22",
     "axios": "^1.6.2",
     "concurrently": "^8.2.1",
     "cookie-session": "^2.0.0",

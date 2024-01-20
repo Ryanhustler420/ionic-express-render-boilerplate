@@ -1,6 +1,7 @@
 import _ from "lodash";
-import React, { useState } from 'react';
+import React from 'react';
 import { Route } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import PrivateRoute from "./components/PrivateRoute";
 import { IonReactRouter } from '@ionic/react-router';
 
@@ -28,6 +29,9 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
+import "brace";
+import "brace/ext/searchbox";
+
 /* Theme variables */
 import './theme/variables.css';
 import "./theme/theme.css";
@@ -49,7 +53,7 @@ export const components = {
   },
 };
 const App: React.FC = () => {
-  const [visibleMainTabs] = useState(false);
+  const tabBarVisible = useSelector((state: any) => state.uiState.tabBarVisible);
 
   const getRoutes = () => {
     return (
@@ -58,6 +62,7 @@ const App: React.FC = () => {
         <PrivateRoute shouldAuthenticated={false} path={components.settings.path} component={components.settings.Component} redirect={components.settings.path} exact />
         {/* Open in both case i.e auth, not-auth */}
         <Route path={"/open"} component={IonApp} exact />
+        {/* <Redirect to={components.home.path} /> */}
       </IonRouterOutlet>
     );
   };
@@ -70,7 +75,7 @@ const App: React.FC = () => {
           <React.Suspense fallback={<IonSpinner />}>
             <IonTabs>
               {getRoutes()}
-              <IonTabBar slot="bottom" hidden={!visibleMainTabs} className={`${ !visibleMainTabs ? 'hidden' : ''}`}>
+              <IonTabBar slot="bottom" hidden={!tabBarVisible} className={`${ !tabBarVisible ? 'hidden' : ''}`}>
                 <IonTabButton tab="settings" href={components.settings.path}>
                   <IonIcon icon={settingsOutline} />
                   <IonLabel>Settings</IonLabel>

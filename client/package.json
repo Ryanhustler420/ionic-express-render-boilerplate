@@ -32,7 +32,9 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "assert": "^2.1.0",
     "blueimp-md5": "^2.19.0",
+    "brace": "^0.11.1",
     "cordova-plugin-x-toast": "^2.7.3",
     "history": "^4.9.0",
     "ionicons": "^7.0.0",
@@ -65,13 +67,13 @@
     "workbox-streams": "^5.1.4"
   },
   "devDependencies": {
+    "@capacitor/cli": "5.6.0",
     "@typescript-eslint/eslint-plugin": "^5.59.2",
     "@typescript-eslint/parser": "^5.59.2",
-    "@capacitor/cli": "5.6.0",
     "concurrently": "^7.6.0",
+    "eslint": "^8.35.0",
     "eslint-plugin-react": "^7.32.2",
-    "tailwindcss": "^3.4.1",
-    "eslint": "^8.35.0"
+    "tailwindcss": "^3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",

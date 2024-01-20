@@ -9,6 +9,11 @@ import './Settings.css';
 const screen = { width: 0, name: 'sm' };
 const Settings: React.FC<{}> = props => {
 
+    // useEffect(() => {
+    //   dispatch(showTabBar());
+    //   return () => { dispatch(hideTabBar()); }
+    // }, []);
+
     const breakPointTrigger = (width: number | undefined, name: string | undefined) => {
         screen.width = width as number;
         screen.name = name as string;
