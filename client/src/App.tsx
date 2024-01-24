@@ -29,9 +29,6 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
-import "brace";
-import "brace/ext/searchbox";
-
 /* Theme variables */
 import './theme/variables.css';
 import "./theme/theme.css";
@@ -73,9 +70,9 @@ const App: React.FC = () => {
         <IonReactRouter>
           {getRoutes()}
           <React.Suspense fallback={<IonSpinner />}>
-            <IonTabs>
+            {tabBarVisible && <IonTabs>
               {getRoutes()}
-              <IonTabBar slot="bottom" hidden={!tabBarVisible} className={`${ !tabBarVisible ? 'hidden' : ''}`}>
+              <IonTabBar slot="bottom" hidden={!tabBarVisible}>
                 <IonTabButton tab="settings" href={components.settings.path}>
                   <IonIcon icon={settingsOutline} />
                   <IonLabel>Settings</IonLabel>
@@ -86,7 +83,7 @@ const App: React.FC = () => {
                   <IonLabel>Home</IonLabel>
                 </IonTabButton>
               </IonTabBar>
-            </IonTabs>
+            </IonTabs>}
           </React.Suspense>
         </IonReactRouter>
       </ApplicationContextProvider>
