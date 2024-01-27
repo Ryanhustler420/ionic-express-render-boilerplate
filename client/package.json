@@ -2,6 +2,7 @@
   "name": "appname",
   "version": "0.0.1",
   "description": "An Ionic project",
+  "proxy": "http://localhost:8080",
   "private": true,
   "dependencies": {
     "@awesome-cordova-plugins/toast": "^6.6.0",
@@ -33,7 +34,7 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
-    "@com.xcodeclazz/address-table-server": "0.0.3",
+    "@com.xcodeclazz/address-table-server": "0.0.9",
     "assert": "^2.1.0",
     "blueimp-md5": "^2.19.0",
     "cordova-plugin-x-toast": "^2.7.3",

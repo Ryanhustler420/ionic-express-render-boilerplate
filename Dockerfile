@@ -1,6 +1,7 @@
 FROM node:20
 
 ARG MONGO_URI=mongodb+srv://username:password@cluster0.4dxvdyw.mongodb.net
+ARG RABBIT_MQ=amqp://appname:password@localhost:port
 ARG ADMIN_PASSWORD=something
 ARG NODE_ENV=development
 ARG DATABASE=appname
@@ -10,6 +11,7 @@ ENV NODE_ENV=${NODE_ENV}
 
 # Set environment variables
 ENV ADMIN_PASSWORD=${ADMIN_PASSWORD}
+ENV RABBIT_MQ=${RABBIT_MQ}
 ENV MONGO_URI=${MONGO_URI}
 ENV DATABASE=${DATABASE}
 ENV JWT_KEY=something

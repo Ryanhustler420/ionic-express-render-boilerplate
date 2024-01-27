@@ -25,6 +25,7 @@ services:
         - ADMIN_PASSWORD=something
         - DATABASE=appname
         - MONGO_URI=mongodb://appname-mongodb:27017
+        - RABBIT_MQ=amqp://appname:password@localhost:port
     restart: always
     ports:
       - "8080:8080"
