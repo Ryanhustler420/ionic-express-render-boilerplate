@@ -41,16 +41,12 @@ app.use(authUserAdminMakeRouter);
 app.use(commonDropCollectionsRouter);
 app.use(commonMetricsRouter);
 
-app.get("/", (req, res) => {
+app.all("*", (req, res) => {
   if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
-  } else res.json({ message: "NO UI FOUND" });
+  } else res.json({ message: "appname" });
 });
 
-app.all("*", async (req, res) => {
-  // throw new NotFoundError();
-  res.redirect("/");
-});
 app.use(celebrate_custome_errors());
 app.use(errorHandler);
 

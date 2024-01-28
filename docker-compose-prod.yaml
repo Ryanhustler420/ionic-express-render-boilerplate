@@ -31,7 +31,7 @@ services:
     volumes:
       - appname-mongodb:/data/db/appname
     ports:
-      - "27017:27017"
+      - "27010:27017"
 
 volumes:
   appname-mongodb:
