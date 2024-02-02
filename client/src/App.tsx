@@ -3,6 +3,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import PrivateRoute from "./components/PrivateRoute";
+import NonPrivateRoute from "./components/NonPrivateRoute";
 import { IonReactRouter } from '@ionic/react-router';
 
 import { homeOutline, settingsOutline } from 'ionicons/icons';
@@ -55,8 +56,8 @@ const App: React.FC = () => {
   const getRoutes = () => {
     return (
       <IonRouterOutlet id="main-drawer" animated={true}>
-        <PrivateRoute shouldAuthenticated={false} path={components.home.path} component={components.home.Component} redirect={components.settings.path} exact />
-        <PrivateRoute shouldAuthenticated={false} path={components.settings.path} component={components.settings.Component} redirect={components.settings.path} exact />
+        <NonPrivateRoute path={components.home.path} component={components.home.Component} redirect={components.settings.path} exact />
+        <NonPrivateRoute path={components.settings.path} component={components.settings.Component} redirect={components.settings.path} exact />
         {/* Open in both case i.e auth, not-auth */}
         <Route path={"/open"} component={IonApp} exact />
         {/* <Redirect to={components.home.path} /> */}

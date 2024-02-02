@@ -32,6 +32,14 @@ const Home: React.FC<{}> = props => {
   const [post, setPost] = useState<any>({});
 
   useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      return event.returnValue = 'Are you sure you want to leave?';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
+
+  useEffect(() => {
     socket.connect();
 
     function onConnect() {
