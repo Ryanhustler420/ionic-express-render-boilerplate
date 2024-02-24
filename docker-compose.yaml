@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 services:
   appname-frontend:
     build:
@@ -13,6 +13,8 @@ services:
       - /app/node_modules
       - /app/build
       - ./client:/app
+    networks:
+      - appname-network
     depends_on:
       - appname-backend
 
@@ -25,7 +27,7 @@ services:
         - ADMIN_PASSWORD=something
         - DATABASE=appname
         - MONGO_URI=mongodb://appname-mongodb:27017
-        - RABBIT_MQ=amqp://appname:password@localhost:port
+        - RABBIT_MQ=amqp://stage:12345@xcodeclazz-mq-backend-stage:5672
     restart: always
     ports:
       - "8080:8080"
@@ -36,6 +38,9 @@ services:
       - /app/node_modules
       - /app/dist
       - .:/app
+    networks:
+      - appname-network
+      - message-queue-network
     depends_on:
       - appname-mongodb
 
@@ -46,6 +51,14 @@ services:
       - appname-mongodb:/data/db/appname
     ports:
       - "27010:27017"
+    networks:
+      - appname-network
+
+networks:
+  appname-network:
+    external: true
+  message-queue-network:
+    external: true
 
 volumes:
   appname-mongodb:
