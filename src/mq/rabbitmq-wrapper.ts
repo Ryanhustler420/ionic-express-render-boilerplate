@@ -1,4 +1,3 @@
-import { AppnameUserCreatedConsumer } from './events/consumers/appname-consumer';
 import * as amqp from 'amqplib';
 
 class RabbitMqWrapper {
@@ -15,7 +14,7 @@ class RabbitMqWrapper {
         console.log("Connected @", new Date());
 
         if (this.conn) {
-            new AppnameUserCreatedConsumer(this.conn).work_queue().catch(console.error);
+            // listeners
         }
 
         this._connection.on("close", () => {
