@@ -27,7 +27,7 @@ services:
         - ADMIN_PASSWORD=something
         - DATABASE=appname
         - MONGO_URI=mongodb://appname-mongodb:27017
-        - RABBIT_MQ=amqp://stage:12345@xcodeclazz-mq-backend-stage:5672
+        - RABBIT_MQ=amqp://stage:12345@xcodeclazz-mq-backend:5672
     restart: always
     ports:
       - "8080:8080"
@@ -46,6 +46,7 @@ services:
 
   appname-mongodb:
     image: mongo
+    container_name: appname-mongodb
     restart: unless-stopped
     volumes:
       - appname-mongodb:/data/db/appname

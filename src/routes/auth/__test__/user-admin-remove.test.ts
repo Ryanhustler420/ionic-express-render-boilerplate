@@ -127,8 +127,7 @@ it("return error if try to remove admin a existing user but the user is banned",
 
 it("return error if try to remove admin a existing user but broken cookie provided", async () => {
   const { cookie } = await register();
-  cookie[0] = cookie[0].replace("1", "."); // cookie
-  cookie[1] = cookie[1].replace("1", "."); // session
+  cookie[0] = cookie[0].replace("1", ".");
 
   const response = await request(app)
     .post("/api/auth/remove-admin")

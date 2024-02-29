@@ -1,9 +1,8 @@
 import jwt from "jsonwebtoken";
 import { JWT_KEY } from "../../env";
 import { User } from "../../models/key/user";
-import { Password } from "../../services/password";
 import express, { Request, Response } from "express";
-import cookieConfig from "../../services/cookie-config";
+import { Password } from "@com.xcodeclazz/monolithic-common";
 import { celebrate, Segments } from "@com.xcodeclazz/celebrate";
 import {
   custom_jwt,
@@ -54,10 +53,7 @@ router.post(
     // Store it on session object
     req.session = { jwt: userJwt };
     res.setHeader("base64", custom_jwt.encode(userJwt));
-    res
-      .cookie("Set-Cookie", custom_jwt.encode(userJwt), cookieConfig)
-      .status(200)
-      .send(existingUser);
+    res.status(200).send(existingUser);
   }
 );
 

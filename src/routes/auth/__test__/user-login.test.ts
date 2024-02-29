@@ -3,8 +3,7 @@ import request from "supertest";
 import { app } from "../../../app";
 import { User } from "../../../models/key/user";
 import { register } from "../../../test/auth-helper";
-import { DUMMY_USER_ATTRS } from "@com.xcodeclazz/monolithic-common";
-import { hasAllKeysWithSameValues } from "../../../services/utils";
+import { DUMMY_USER_ATTRS, hasAllKeysWithSameValues } from "@com.xcodeclazz/monolithic-common";
 
 const email = "example@test.com";
 const password = "password";

@@ -4,8 +4,7 @@ import { register } from "../../../test/auth-helper";
 
 it("return nothing if broken cookie provided", async () => {
   const { cookie } = await register();
-  cookie[0] = cookie[0].replace("1", "."); // cookie
-  cookie[1] = cookie[1].replace("1", "."); // session
+  cookie[0] = cookie[0].replace("1", ".");
 
   const response = await request(app)
     .get("/api/auth/currentuser")

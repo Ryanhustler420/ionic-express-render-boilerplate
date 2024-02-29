@@ -14,17 +14,19 @@ class RabbitMqWrapper {
         console.log("Connected @", new Date());
 
         if (this.conn) {
+            // todo: send alert, connected
             // listeners
         }
 
         this._connection.on("close", () => {
+            // todo: send alert
             console.error('Connection to RabbitMQ closed. Reconnecting...', new Date());
-            setTimeout(() => this.connect(url), 2000);
+            setTimeout(() => this.connect(url), 10000);
         });
       } catch (error) {
         // @ts-ignore
         console.error(error?.message, new Date());
-        setTimeout(() => this.connect(url), 2000);
+        setTimeout(() => this.connect(url), 10000);
       }
     }
 }
