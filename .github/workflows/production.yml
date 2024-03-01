@@ -42,6 +42,7 @@ jobs:
           --build-arg MONGO_URI="${{ secrets.WF_MONGODB_PRODUCTION_URI }}" \
           --build-arg BACKEND_URL="${{ secrets.WF_BACKEND_PRODUCTION_URL }}" \
           --build-arg ADMIN_PASSWORD="${{ secrets.WF_ADMIN_PASSWORD_PRODUCTION }}" \
+          --build-arg MONOLITHIC_URL="${{ secrets.WF_MONOLITHIC_PRODUCTION_URL }}" \
           --build-arg DATABASE="${{ secrets.WF_MONGODB_PRODUCTION_DATABASE_NAME }}"
       - name: 🏡 Run production image
         run: docker run -d -p ${{ env.PRODUCTION_PORT }}:${{ env.CONTAINER_PORT }} ${{ secrets.WF_DOCKER_PRODUCTION_IMAGE_NAME }}

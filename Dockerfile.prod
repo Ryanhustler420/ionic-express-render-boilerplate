@@ -5,6 +5,7 @@ ARG RABBIT_MQ=amqp://appname:password@localhost:port
 ARG ADMIN_PASSWORD=something
 ARG NODE_ENV=production
 ARG DATABASE=appname
+ARG MONOLITHIC_URL='/'
 ARG BACKEND_URL='/'
 
 # Please dont change this here, You can change this via outside
@@ -33,7 +34,7 @@ RUN npm install
 COPY . .
 
 RUN npm install --prefix client
-RUN node client/inject-env.ts -b=${BACKEND_URL}
+RUN node client/inject-env.ts -b=${BACKEND_URL} --monolithic=${MONOLITHIC_URL}
 RUN npm run build --prefix client
 RUN npm run build
 
