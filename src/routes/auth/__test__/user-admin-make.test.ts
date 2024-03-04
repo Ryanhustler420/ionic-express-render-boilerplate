@@ -52,7 +52,7 @@ it("return error if not logged in user try to make admin", async () => {
     .post("/api/auth/make-admin")
     .send({
       email: "example@fake.com",
-      code: "12345",
+      code: "SW5ziV9wGzq1wxOb8dok5ua2EjzHr5Tgf93GOQcF",
     })
     .expect(401);
 
@@ -70,7 +70,7 @@ it("return error if try to make admin but code provided was wrong", async () => 
     .set("Cookie", cookie)
     .send({
       email: email,
-      code: "123456",
+      code: "wrong",
     })
     .expect(400);
 
@@ -90,7 +90,7 @@ it("return error if try to make admin a non-existing user", async () => {
     .set("Cookie", cookie)
     .send({
       email: "example@domain.com",
-      code: "12345",
+      code: "SW5ziV9wGzq1wxOb8dok5ua2EjzHr5Tgf93GOQcF",
     })
     .expect(400);
 
@@ -112,7 +112,7 @@ it("return error if try to make admin a existing user but the user is banned", a
     .set("Cookie", cookie)
     .send({
       email: email,
-      code: "12345",
+      code: "SW5ziV9wGzq1wxOb8dok5ua2EjzHr5Tgf93GOQcF",
     })
     .expect(400);
 
@@ -132,7 +132,7 @@ it("return error if try to make admin a existing user but broken cookie provided
     .set("Cookie", cookie)
     .send({
       email: email,
-      code: "12345",
+      code: "SW5ziV9wGzq1wxOb8dok5ua2EjzHr5Tgf93GOQcF",
     })
     .expect(401);
 
@@ -150,7 +150,7 @@ it("return error if try to make admin an existing user but provided extra data",
     .set("Cookie", cookie)
     .send({
       email: email,
-      code: "12345",
+      code: "SW5ziV9wGzq1wxOb8dok5ua2EjzHr5Tgf93GOQcF",
       princess: true,
     })
     .expect(400);
@@ -171,7 +171,7 @@ it("response with a message when given valid credentials", async () => {
     .set("Cookie", cookie)
     .send({
       email: email,
-      code: "12345",
+      code: "SW5ziV9wGzq1wxOb8dok5ua2EjzHr5Tgf93GOQcF",
     })
     .expect(200);
 

@@ -1,3 +1,4 @@
+import { DependenciesConnections } from '@com.xcodeclazz/monolithic-common';
 import * as amqp from 'amqplib';
 
 class RabbitMqWrapper {
@@ -20,6 +21,7 @@ class RabbitMqWrapper {
 
         this._connection.on("close", () => {
             // todo: send alert
+            DependenciesConnections.getInstance().setRabbitMq(false);
             console.error('Connection to RabbitMQ closed. Reconnecting...', new Date());
             setTimeout(() => this.connect(url), 10000);
         });
@@ -27,6 +29,7 @@ class RabbitMqWrapper {
         // @ts-ignore
         console.error(error?.message, new Date());
         setTimeout(() => this.connect(url), 10000);
+        DependenciesConnections.getInstance().setRabbitMq(false);
       }
     }
 }

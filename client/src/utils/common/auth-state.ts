@@ -1,32 +1,32 @@
 import _ from 'lodash';
-import { IPreviewUser } from '../../apis/definations';
+import { UserAttrs } from '@com.xcodeclazz/monolithic-common';
 
 export default class AuthState {
 
     saveToken(token: string): void {
-        this.save('lock', token);
+        this.save('l', token);
     }
     getToken(): string | null {
-        return this.get('lock');
+        return this.get('l');
     }
 
-    saveUser(cache: IPreviewUser | null): void {
-        this.save('auth_table', JSON.stringify(cache));
+    saveUser(cache: UserAttrs | null): void {
+        this.save('x', btoa(JSON.stringify(cache)));
     }
 
     validateUser() {
         let token = this.getToken();
-        let user = this.getUser() as IPreviewUser;
+        let user = this.getUser() as UserAttrs | null;
         if (user != null && token != null) return true;
         return false;
     };
 
-    getUser() {
-        if (this.get('auth_table') == null) return null;
+    getUser(): UserAttrs | null{
+        if (this.get('x') == null) return null;
         try {
-            return JSON.parse(this.get('auth_table')!.toString());
-        } catch (err) {
-            return null
+            return JSON.parse(atob(this.get('x')!.toString()));
+        } catch {
+            return null;
         }
     }
 

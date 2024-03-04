@@ -2,7 +2,7 @@ FROM node:20
 
 ARG MONGO_URI=mongodb+srv://username:password@cluster0.4dxvdyw.mongodb.net
 ARG RABBIT_MQ=amqp://appname:password@localhost:port
-ARG ADMIN_PASSWORD=something
+ARG ADMIN_PASSWORD=SW5ziV9wGzq1wxOb8dok5ua2EjzHr5Tgf93GOQcF
 ARG NODE_ENV=development
 ARG DATABASE=appname
 
@@ -14,7 +14,7 @@ ENV ADMIN_PASSWORD=${ADMIN_PASSWORD}
 ENV RABBIT_MQ=${RABBIT_MQ}
 ENV MONGO_URI=${MONGO_URI}
 ENV DATABASE=${DATABASE}
-ENV JWT_KEY=something
+ENV JWT_KEY=ydO4VUkf5eAJ4aub97zhaD8Vm3pPFOC9TTLt528R
 ENV PORT=8080
 
 WORKDIR /app

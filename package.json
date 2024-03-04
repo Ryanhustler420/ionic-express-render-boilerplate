@@ -41,7 +41,7 @@
     "@types/amqplib": "^0.10.4",
     "@com.xcodeclazz/mq": "^0.0.10",
     "@com.xcodeclazz/celebrate": "^0.0.1",
-    "@com.xcodeclazz/monolithic-common": "^0.0.27",
+    "@com.xcodeclazz/monolithic-common": "^0.0.28",
     "amqplib": "^0.10.3",
     "axios": "^1.6.2",
     "concurrently": "^8.2.1",
