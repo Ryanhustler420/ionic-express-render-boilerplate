@@ -25,7 +25,9 @@ describe("@concurrent", () => {
         .send(custom)
         .expect(201);
       expect(response.body).not.toHaveProperty("errors");
-      expect(response.body.email).toEqual(custom.email);
+      expect(response.body).toHaveProperty("session");
+      expect(response.body).toHaveProperty("user");
+      expect(response.body.user.email).toEqual(custom.email);
     },
     timeout_ms
   );
@@ -40,7 +42,9 @@ describe("@concurrent", () => {
         .send(custom)
         .expect(201);
       expect(response.body).not.toHaveProperty("errors");
-      expect(response.body.email).toEqual(custom.email);
+      expect(response.body).toHaveProperty("session");
+      expect(response.body).toHaveProperty("user");
+      expect(response.body.user.email).toEqual(custom.email);
     },
     timeout_ms
   );
@@ -55,7 +59,9 @@ describe("@concurrent", () => {
         .send(custom)
         .expect(201);
       expect(response.body).not.toHaveProperty("errors");
-      expect(response.body.email).toEqual(custom.email);
+      expect(response.body).toHaveProperty("session");
+      expect(response.body).toHaveProperty("user");
+      expect(response.body.user.email).toEqual(custom.email);
     },
     timeout_ms
   );
@@ -70,7 +76,9 @@ describe("@concurrent", () => {
         .send(custom)
         .expect(201);
       expect(response.body).not.toHaveProperty("errors");
-      expect(response.body.email).toEqual(custom.email);
+      expect(response.body).toHaveProperty("session");
+      expect(response.body).toHaveProperty("user");
+      expect(response.body.user.email).toEqual(custom.email);
     },
     timeout_ms
   );
@@ -85,7 +93,9 @@ describe("@concurrent", () => {
         .send(custom)
         .expect(201);
       expect(response.body).not.toHaveProperty("errors");
-      expect(response.body.email).toEqual(custom.email);
+      expect(response.body).toHaveProperty("session");
+      expect(response.body).toHaveProperty("user");
+      expect(response.body.user.email).toEqual(custom.email);
     },
     timeout_ms
   );
@@ -100,7 +110,9 @@ describe("@concurrent", () => {
         .send(custom)
         .expect(201);
       expect(response.body).not.toHaveProperty("errors");
-      expect(response.body.email).toEqual(custom.email);
+      expect(response.body).toHaveProperty("session");
+      expect(response.body).toHaveProperty("user");
+      expect(response.body.user.email).toEqual(custom.email);
     },
     timeout_ms
   );
@@ -115,7 +127,9 @@ describe("@concurrent", () => {
         .send(custom)
         .expect(201);
       expect(response.body).not.toHaveProperty("errors");
-      expect(response.body.email).toEqual(custom.email);
+      expect(response.body).toHaveProperty("session");
+      expect(response.body).toHaveProperty("user");
+      expect(response.body.user.email).toEqual(custom.email);
     },
     timeout_ms
   );
@@ -130,7 +144,9 @@ describe("@concurrent", () => {
         .send(custom)
         .expect(201);
       expect(response.body).not.toHaveProperty("errors");
-      expect(response.body.email).toEqual(custom.email);
+      expect(response.body).toHaveProperty("session");
+      expect(response.body).toHaveProperty("user");
+      expect(response.body.user.email).toEqual(custom.email);
     },
     timeout_ms
   );
@@ -145,7 +161,9 @@ describe("@concurrent", () => {
         .send(custom)
         .expect(201);
       expect(response.body).not.toHaveProperty("errors");
-      expect(response.body.email).toEqual(custom.email);
+      expect(response.body).toHaveProperty("session");
+      expect(response.body).toHaveProperty("user");
+      expect(response.body.user.email).toEqual(custom.email);
     },
     timeout_ms
   );
@@ -160,7 +178,9 @@ describe("@concurrent", () => {
         .send(custom)
         .expect(201);
       expect(response.body).not.toHaveProperty("errors");
-      expect(response.body.email).toEqual(custom.email);
+      expect(response.body).toHaveProperty("session");
+      expect(response.body).toHaveProperty("user");
+      expect(response.body.user.email).toEqual(custom.email);
     },
     timeout_ms
   );
@@ -214,14 +234,16 @@ describe("@sequence", () => {
       .send(payload)
       .expect(400);
 
-    expect(res1.body).toHaveProperty("email");
+    expect(res1.body).toHaveProperty("session");
+    expect(res1.body).toHaveProperty("user");
+    expect(res1.body.user).toHaveProperty("email");
     expect(res2.body).toHaveProperty("errors");
     expect(res2.body.errors[0].message).toContain(
       "This email address is already in use"
     );
 
     const user = await User.findOne({ email });
-    expect(user?.id).toEqual(res1.body.id);
+    expect(user?.id).toEqual(res1.body.user.id);
     expect(user?.name).toEqual(payload.name);
     expect(user?.email).toEqual(payload.email);
     expect(user?.address).toEqual(payload.address);

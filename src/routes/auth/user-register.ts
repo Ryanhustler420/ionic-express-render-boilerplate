@@ -1,8 +1,9 @@
 import _ from "lodash";
 import jwt from "jsonwebtoken";
-import { JWT_KEY } from "../../env";
 import { User } from "../../models/key/user";
+import { ADMIN_PASSWORD, JWT_KEY } from "../../env";
 import express, { Request, Response } from "express";
+import { encode } from "@com.xcodeclazz/session-controller";
 import { Segments, celebrate } from "@com.xcodeclazz/celebrate";
 import {
   Roles,
@@ -10,6 +11,7 @@ import {
   currentUser,
   notRequireAuth,
   BadRequestError,
+  AuthResponse_RegisterUser,
   AuthPayloadJoi_RegisterUser,
 } from "@com.xcodeclazz/monolithic-common";
 
@@ -66,7 +68,12 @@ router.post(
     // Store it on session object
     req.session = { jwt: userJwt };
     res.setHeader("base64", custom_jwt.encode(userJwt));
-    res.status(201).send(user);
+
+    const response: AuthResponse_RegisterUser = {
+      user: user,
+      session: encode({ email: user.email }, ADMIN_PASSWORD),
+    };
+    res.status(201).send(response);
   }
 );
 

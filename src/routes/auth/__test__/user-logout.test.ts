@@ -23,7 +23,7 @@ it("logouts user even if data provided, wrong or right", async () => {
     })
     .expect(200);
 
-  expect(response.body).toEqual({});
+  expect(response.body).toHaveProperty("session");
   expect(response.get("Base64")).toEqual("");
 });
 
@@ -47,9 +47,7 @@ it("clears the cookie after logout", async () => {
     .set("Cookie", cookie)
     .expect(200);
 
-  expect(response.body).toEqual({});
+  expect(response.body).toHaveProperty("session");
   expect(response.get("Base64")).toEqual("");
-  expect(response.get("Set-Cookie")[0]).toEqual(
-    "Set-Cookie=; Path=/"
-  );
+  expect(response.get("Set-Cookie")[0]).toEqual("Set-Cookie=; Path=/");
 });

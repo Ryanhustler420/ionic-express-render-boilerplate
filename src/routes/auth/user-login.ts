@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
-import { JWT_KEY } from "../../env";
 import { User } from "../../models/key/user";
+import { ADMIN_PASSWORD, JWT_KEY } from "../../env";
 import express, { Request, Response } from "express";
-import { Password } from "@com.xcodeclazz/monolithic-common";
+import { encode } from "@com.xcodeclazz/session-controller";
 import { celebrate, Segments } from "@com.xcodeclazz/celebrate";
+import { AuthResponse_LoginUser, Password } from "@com.xcodeclazz/monolithic-common";
 import {
   custom_jwt,
   currentUser,
@@ -53,7 +54,12 @@ router.post(
     // Store it on session object
     req.session = { jwt: userJwt };
     res.setHeader("base64", custom_jwt.encode(userJwt));
-    res.status(200).send(existingUser);
+
+    const response: AuthResponse_LoginUser = {
+      user: existingUser,
+      session: encode({ email: existingUser.email }, ADMIN_PASSWORD),
+    };
+    res.status(200).send(response);
   }
 );
 
